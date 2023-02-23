@@ -8,7 +8,8 @@ import http from 'http'
 import https from 'https'
 import fs from 'fs'
 import Log from './utils/log'
-
+import http_redirect from './middleware/https-redirect'
+import auth_router from './routes/auth'
 
 
 const log = new Log("app")
@@ -20,10 +21,14 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
+//app.use(cors())
+app.use(http_redirect)
+app.use('/', auth_router)
+
 
 async function start() {
     try {
-        mongoose.set('strictQuery',false)
+        mongoose.set('strictQuery', false)
         mongoose.connect(config.get('mongoUri'))
             .then(() => log.info('Mongo DB connection successfull'))
         mongoose.connection.on('error', (err) => log.error(err))
