@@ -6,7 +6,7 @@ export default class Log {
     }
 
     error(subject:string){
-        console.log(`[-SERVER ERROR-] in (${this.methodName}):: ${subject}`)
+        console.error(`[-SERVER ERROR-] in (${this.methodName}):: ${subject}`)
     }
 
     info(subject:string){

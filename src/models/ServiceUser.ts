@@ -6,9 +6,9 @@ export interface IServiceUser {
 }
 
 const serviceUser = new Schema<IServiceUser>({
-    email: { type: String, required: true },
-    password: { type: String, required: true, unique: true }
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true }
 })
 
 
-export default model('ServiceUser',serviceUser)
+export default model('ServiceUser', serviceUser)

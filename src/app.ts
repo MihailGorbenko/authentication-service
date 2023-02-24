@@ -21,8 +21,13 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
-//app.use(cors())
-app.use(http_redirect)
+app.use(cors(
+    {
+        credentials: true,
+        origin: config.get('allowedOrigins')
+    }
+))
+//app.use(http_redirect)
 app.use('/', auth_router)
 
 

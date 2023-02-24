@@ -21,12 +21,16 @@ const http_1 = __importDefault(require("http"));
 const https_1 = __importDefault(require("https"));
 const fs_1 = __importDefault(require("fs"));
 const log_1 = __importDefault(require("./utils/log"));
+const auth_1 = __importDefault(require("./routes/auth"));
 const log = new log_1.default("app");
 const HTTP_PORT = config_1.default.get('http_port');
 const HTTPS_PORT = config_1.default.get('https_port');
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
+//app.use(cors())
+//app.use(http_redirect)
+app.use('/', auth_1.default);
 function start() {
     return __awaiter(this, void 0, void 0, function* () {
         try {

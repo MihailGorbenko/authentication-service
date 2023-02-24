@@ -11,7 +11,8 @@
     "docker:push": "docker push mihago/authentication-service:latest",
     "docker:publish": "run-s build docker:push",
     "compile": "tsc",
-    "start": "node ./dist/app.js"
+    "run": "node ./dist/app.js",
+    "start": "run-s compile run"
   },
   "author": "Miha Go",
   "license": "ISC",

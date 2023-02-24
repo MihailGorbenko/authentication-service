@@ -6,7 +6,7 @@ class Log {
         this.methodName = methodName;
     }
     error(subject) {
-        console.log(`[-SERVER ERROR-] in (${this.methodName}):: ${subject}`);
+        console.error(`[-SERVER ERROR-] in (${this.methodName}):: ${subject}`);
     }
     info(subject) {
         console.log(`[-SERVER INFO-] from (${this.methodName}):: ${subject}`);
