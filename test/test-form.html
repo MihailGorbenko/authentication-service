@@ -33,7 +33,7 @@
 
         authForm.onsubmit = async(e) => {
             e.preventDefault()
-            await fetch('http://localhost:3000/register',{
+            await fetch('http://localhost:3000/checkEmail',{
                 method:'POST',
                 credentials:"include",
                 headers:{
