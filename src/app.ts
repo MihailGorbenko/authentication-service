@@ -8,8 +8,8 @@ import http from 'http'
 import https from 'https'
 import fs from 'fs'
 import Log from './utils/log'
-import http_redirect from './middleware/https-redirect'
-import auth_router from './routes/auth'
+import httpRedirect from './middleware/httpsRredirect'
+import serviceRouter from './router/appRouter'
 
 
 const log = new Log("app")
@@ -28,7 +28,7 @@ app.use(cors(
     }
 ))
 //app.use(http_redirect)
-app.use('/', auth_router)
+app.use('/',serviceRouter )
 
 
 async function start() {
