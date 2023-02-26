@@ -1,13 +1,14 @@
 import { Request, Response, Router } from "express";
-import Log from "../../utils/log";
+import Log from "../../../utils/log";
 import { body, validationResult } from "express-validator";
-import { ResponceStatus } from "../responce_status";
-import allowedEmail from "../../middleware/userRegistred";
+import { ResponceStatus } from "../../responce_status";
+import allowedEmail from "../../../middleware/userRegistred";
 import { Error } from "mongoose";
 import bcrypt from "bcrypt";
 import JWT from "jsonwebtoken";
 import config from "config";
-import RefreshToken from "../../models/RefreshToken";
+import RefreshToken from "../../../models/RefreshToken";
+import expire_in_ms from "../../expire_in_ms";
 
 const loginRouter = Router();
 const log = new Log("Route: /login");
@@ -60,25 +61,28 @@ loginRouter.post(
                     expiresIn: "10m",
                 }
             );
+            /// Check if an old refresh token exist
+            const oldRefreshToken = await RefreshToken.findOne({userId:user.id})
+            if(oldRefreshToken) await oldRefreshToken.deleteOne()
+            /////////////////
+
             const refreshToken = JWT.sign({}, config.get("jwtSecret"), {});
 
-            const RTRecord = new RefreshToken({token: refreshToken});
+            const RTRecord = new RefreshToken({ token: refreshToken, userId: user.id });
             //// Recording refresh token
-            RTRecord.save().then(
-                (onfullfiled) => {
-                    log.info("Refresh token saved");
-                },
-                (onrejected) => {
-                    log.error("Error saving refresh token");
-                    return res.status(ResponceStatus.StorageError).json({
-                        message: "Error saving refresh token",
-                    });
-                }
-            );
+            await RTRecord.save()
             ///////////////
+            res.cookie('refreshToken',
+                refreshToken,
+                {
+                    httpOnly: true,
+                    secure: true,
+                    maxAge: expire_in_ms['1month'],
+                    sameSite: 'none',
+                    path: '/refreshToken'
+                })
             return res.status(ResponceStatus.Success).json({
                 accessToken: JSON.stringify(accessToken),
-                refreshToken: JSON.stringify(refreshToken),
             });
         } catch (e: Error | any) {
             log.error(`Error ${e?.message}`);
