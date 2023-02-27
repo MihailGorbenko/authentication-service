@@ -30,7 +30,7 @@ registerRouter.post(
         });
       }
       //////////////////////////////////////////
-
+      
       const { email, password } = req.body;
 
       ///// Check email 
@@ -49,6 +49,9 @@ registerRouter.post(
 
       const serviceUser = new ServiceUser({ email, password: hashPswd })
       await serviceUser.save()
+      return res.status(ResponceStatus.Success).json({
+        message: 'User registred successfully'
+      })
        
 
       ////////////////////////////////////////////
