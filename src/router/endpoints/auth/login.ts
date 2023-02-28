@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import Log from "../../../utils/log";
 import { body, validationResult } from "express-validator";
 import { ResponceStatus } from "../../responce_status";
-import allowedEmail from "../../../middleware/userRegistred";
+import userRegistred from "../../../middleware/userRegistred";
 import { Error } from "mongoose";
 import bcrypt from "bcrypt";
 import JWT from "jsonwebtoken";
@@ -15,7 +15,7 @@ const log = new Log("Route: /login");
 
 loginRouter.post(
     "/",
-    [allowedEmail, body("password", "bad password").isLength({ min: 5 })],
+    [userRegistred, body("password", "bad password").isLength({ min: 5 }).isString()],
     async (req: Request, res: Response) => {
         try {
             const errors = validationResult(req);
@@ -62,8 +62,8 @@ loginRouter.post(
                 }
             );
             /// Check if an old refresh token exist
-            const oldRefreshToken = await RefreshToken.findOne({userId:user.id})
-            if(oldRefreshToken) await oldRefreshToken.deleteOne()
+            const oldRefreshToken = await RefreshToken.findOne({ userId: user.id })
+            if (oldRefreshToken) await oldRefreshToken.deleteOne()
             /////////////////
 
             const refreshToken = JWT.sign({}, config.get("jwtSecret"), {});
@@ -81,9 +81,11 @@ loginRouter.post(
                     sameSite: 'none',
                     path: '/refreshToken'
                 })
+
             return res.status(ResponceStatus.Success).json({
                 accessToken: JSON.stringify(accessToken),
             });
+
         } catch (e: Error | any) {
             log.error(`Error ${e?.message}`);
             return res.status(ResponceStatus.ServerError).json({

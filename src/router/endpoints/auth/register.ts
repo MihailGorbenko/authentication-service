@@ -18,7 +18,7 @@ registerRouter.post(
     body("password", "bad password").isString().isLength({ min: 5 }),
   ],
   async (req: Request, res: Response) => {
-    
+
     try {
       ///// Validating request params
       const errors = validationResult(req);
@@ -30,7 +30,7 @@ registerRouter.post(
         });
       }
       //////////////////////////////////////////
-      
+
       const { email, password } = req.body;
 
       ///// Check email 
@@ -52,7 +52,7 @@ registerRouter.post(
       return res.status(ResponceStatus.Success).json({
         message: 'User registred successfully'
       })
-       
+
 
       ////////////////////////////////////////////
     } catch (e: Error | any) {

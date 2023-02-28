@@ -20,7 +20,7 @@ refreshTokenRouter.post(
 
         try {
             const { refreshToken } = req.cookies
-            
+
 
             if (!refreshToken) {
                 return res.status(ResponceStatus.BadRequest).json({

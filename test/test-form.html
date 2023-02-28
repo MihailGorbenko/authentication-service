@@ -37,6 +37,12 @@
                   <li><a class="dropdown-item" href="#">refreshToken</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="#">checkEmail</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">resetPassword</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">resetPasswordLink/28de606c-4b03-4512-b090-9f45f9adf0ad</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">setPassword</a></li>
                 </ul>
               </div>
         </div>
@@ -72,10 +78,11 @@
                 },
                 body: JSON.stringify({
                     email: email_input.value,
-                    password: pass_input.value
+                    password: pass_input.value,
+                    token: "6ef12628-46d6-4a03-91f0-3113e82ceb34"
 
                 })
-            })
+            }).then(res =>console.log(res))
             submit_button.removeAttribute('disabled')
         }
     </script>
