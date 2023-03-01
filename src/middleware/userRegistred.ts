@@ -48,7 +48,7 @@ export default async function (
   else {
     return res.status(ResponceStatus.BadRequest).json({
       message: "Email required",
-      predicate: "EMPTY_EMAIL",
+      predicate: "INCORRECT",
     });
   }
 

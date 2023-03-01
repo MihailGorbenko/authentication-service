@@ -12,57 +12,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const express_validator_1 = require("express-validator");
-const ResetPasswordToken_1 = __importDefault(require("../../../models/ResetPasswordToken"));
-const log_1 = __importDefault(require("../../../utils/log"));
-const responce_status_1 = require("../../responce_status");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const express_validator_1 = require("express-validator");
 const config_1 = __importDefault(require("config"));
+const log_1 = __importDefault(require("../../../utils/log"));
 const ServiceUser_1 = __importDefault(require("../../../models/ServiceUser"));
-const setPasswordRouter = (0, express_1.Router)();
-const log = new log_1.default('Route: /setPassword');
-setPasswordRouter.post('/', [
-    (0, express_validator_1.body)('password', 'bad password').isLength({ min: 5 }).isString(),
-    (0, express_validator_1.body)('token', 'bad token').isString().isLength({ min: 1 })
+const responce_status_1 = require("../../responce_status");
+const express_1 = require("express");
+const userRegistred_1 = __importDefault(require("../../../middleware/userRegistred"));
+const registerRouter = (0, express_1.Router)();
+const log = new log_1.default("Route: /register");
+registerRouter.post("/", [
+    userRegistred_1.default,
+    (0, express_validator_1.body)("password", "bad password").isString().isLength({ min: 5 }),
 ], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const errors = (0, express_validator_1.validationResult)(req);
         ///// Validating request params
+        const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
             return res.status(responce_status_1.ResponceStatus.BadRequest).json({
-                message: "Bad password or token",
-                predicate: "INCORRECT",
+                message: "Incorect credentials",
+                predicate: "INCORECT",
                 errors: errors.array(),
             });
         }
-        const { password, token } = req.body;
-        const resetPasswordRecord = yield ResetPasswordToken_1.default.findOne({ token });
-        /// Check if token exists
-        if (!resetPasswordRecord) {
-            log.info('Reset token not found');
+        //////////////////////////////////////////
+        const { email, password } = req.body;
+        ///// Check email 
+        if (req.user) {
+            log.info(`User ${email} already exists`);
             return res.status(responce_status_1.ResponceStatus.BadRequest).json({
-                message: 'Reset token incorect or expired'
+                message: "User already registred",
+                predicate: "EXIST",
             });
         }
-        log.info('Token found');
-        const userId = resetPasswordRecord.userId;
-        const serviceUser = yield ServiceUser_1.default.findById(userId);
-        if (!serviceUser) {
-            log.info('User not found');
-            return res.status(responce_status_1.ResponceStatus.StorageError).json({
-                message: 'User not found'
-            });
-        }
-        //// Hashing new password,updating user
-        const hashedPassword = bcrypt_1.default.hashSync(password, config_1.default.get('passwordSalt'));
-        serviceUser.password = hashedPassword;
+        //// Create new service user
+        log.info(`Creating service user ${email}`);
+        const hashPswd = bcrypt_1.default.hashSync(password, config_1.default.get("passwordSalt"));
+        const serviceUser = new ServiceUser_1.default({ email, password: hashPswd });
         yield serviceUser.save();
-        yield resetPasswordRecord.delete();
-        log.info('Password reset');
         return res.status(responce_status_1.ResponceStatus.Success).json({
-            message: 'Password reset'
+            message: 'User registred successfully'
         });
+        ////////////////////////////////////////////
     }
     catch (e) {
         log.error(`Error ${e === null || e === void 0 ? void 0 : e.message}`);
@@ -71,4 +63,4 @@ setPasswordRouter.post('/', [
         });
     }
 }));
-exports.default = setPasswordRouter;
+exports.default = registerRouter;
