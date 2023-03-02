@@ -20,6 +20,7 @@ refreshTokenRouter.post(
 
         try {
             const { refreshToken } = req.cookies
+            const database = req.database
 
 
             if (!refreshToken) {
@@ -29,7 +30,8 @@ refreshTokenRouter.post(
                 })
             }
 
-            const tokenRecord = await RefreshToken.findOne({ token: refreshToken })
+            const tokenRecord = await database.findRefrToken(refreshToken, true)
+
             if (!tokenRecord) {
                 return res.status(ResponceStatus.NotAuthorized).json({
                     message: 'Refresh token not exists or already deprecated',
@@ -37,8 +39,6 @@ refreshTokenRouter.post(
                 })
             }
             const { userId } = tokenRecord
-
-            await tokenRecord.deleteOne()
 
             //// Genereting JWT pair
             const accessToken = JWT.sign(
@@ -50,12 +50,9 @@ refreshTokenRouter.post(
                     expiresIn: "10m",
                 }
             );
-            const newRefreshToken = JWT.sign({}, config.get("jwtSecret"), {});
 
-            const RTRecord = new RefreshToken({ token: newRefreshToken, userId });
-            //// Recording refresh token
-            await RTRecord.save()
-            ///////////////
+            const newRefreshToken = await database.createNewRefrToken(userId)
+
             res.cookie('refreshToken',
                 newRefreshToken,
                 {

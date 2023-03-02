@@ -30,6 +30,7 @@ loginRouter.post(
             ///////////////////////////////
             const { email, password } = req.body;
             const user = req.user;
+            const database = req.database
             ///// Check user
             if (!user) {
                 log.info(`User ${email} not registred`);
@@ -62,16 +63,10 @@ loginRouter.post(
                 }
             );
             /// Check if an old refresh token exist
-            const oldRefreshToken = await RefreshToken.findOne({ userId: user.id })
-            if (oldRefreshToken) await oldRefreshToken.deleteOne()
+            await database.findRefrTokenByUserId(user.id, true)
             /////////////////
-
-            const refreshToken = JWT.sign({}, config.get("jwtSecret"), {});
-
-            const RTRecord = new RefreshToken({ token: refreshToken, userId: user.id });
-            //// Recording refresh token
-            await RTRecord.save()
-            ///////////////
+            const refreshToken = await database.createNewRefrToken(user.id)
+            
             res.cookie('refreshToken',
                 refreshToken,
                 {

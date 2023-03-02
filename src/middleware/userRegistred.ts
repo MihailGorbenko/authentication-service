@@ -14,16 +14,17 @@ export default async function (
   res: Response,
   next: NextFunction
 ) {
-  const email: string = req.body?.email;
+  const email: string = req.body.email;
+  const database = req.database
 
   if (email) {
     if (email.toLowerCase().match(emailRegex)) {
       try {
-        const candidate = await ServiceUser.findOne({ email }).exec();
+        const user = await database.findUserByEmail(email)
 
-        if (candidate) {
+        if (user) {
           log.info("Email already exists");
-          req.user = candidate
+          req.user = user
         }
         else {
           req.user = null

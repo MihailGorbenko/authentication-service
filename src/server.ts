@@ -6,7 +6,8 @@ import fs from 'fs'
 import config from 'config'
 import Log from './utils/log'
 import httpRedirect from './middleware/httpsRredirect'
-import app from './app'
+import createApp from './app'
+import createDatabase from './storage/db'
 
 
 const log = new Log("Server")
@@ -16,10 +17,8 @@ const HTTPS_PORT = config.get('https_port')
 
 
  try {
-        mongoose.set('strictQuery', false)
-        mongoose.connect(config.get('mongoUri'))
-            .then(() => log.info('Mongo DB connection successfull'))
-        mongoose.connection.on('error', (err) => log.error(err))
+      const db = createDatabase()
+      const app = createApp(db)
 
         http.createServer(app).listen(HTTP_PORT, () => log.info(`HTTP server listening on port ${HTTP_PORT}`))
 

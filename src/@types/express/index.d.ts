@@ -1,14 +1,15 @@
 import { IServiceUser } from "../../models/ServiceUser";
-import { Document,Types } from "mongoose";
+import { Document, Types } from "mongoose";
+import { DB } from "../../storage/db.api";
+import { ServiceUserRecord } from "../../types/databaseRecords";
 
 export { }
 
 declare global {
   namespace Express {
     export interface Request {
-      user?: (Document<unknown, any, IServiceUser> & IServiceUser & {
-        _id: Types.ObjectId;
-      }) | null
+      user: ServiceUserRecord,
+      database: DB
 
     }
   }

@@ -1,19 +1,17 @@
-import mongoose from 'mongoose'
 import request from 'supertest'
-import app from '../../src/app'
-import config from 'config'
+import createApp from '../../src/app'
 import { randomUUID } from 'crypto'
+import createDatabase from '../../src/storage/db'
 
+let app:any
 
 beforeAll(async () => {
-    mongoose.set('strictQuery', false)
-    await mongoose.connect(config.get('mongoUri'))
+   const db = createDatabase()
+   app = createApp(db)
 
 })
 
-afterAll(async () => {
-    await mongoose.connection.close()
-})
+
 describe('POST /register', () => {
 
     describe("when passed an email and password", () => {
@@ -31,6 +29,7 @@ describe('POST /register', () => {
             expect(res.headers['content-type']).toEqual(expect.stringContaining('json'))
             expect(res.status).toBe(200)
             expect(res.body.message).toBeDefined()
+            expect(res.body.userId).toBeDefined()
         })
 
     })

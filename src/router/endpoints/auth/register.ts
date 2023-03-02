@@ -32,6 +32,7 @@ registerRouter.post(
       //////////////////////////////////////////
 
       const { email, password } = req.body;
+      const database = req.database
 
       ///// Check email 
       if (req.user) {
@@ -45,12 +46,11 @@ registerRouter.post(
       //// Create new service user
       log.info(`Creating service user ${email}`);
 
-      const hashPswd = bcrypt.hashSync(password, config.get("passwordSalt"));
+      const userId = await database.addServiceUser({ email, password })
 
-      const serviceUser = new ServiceUser({ email, password: hashPswd })
-      await serviceUser.save()
       return res.status(ResponceStatus.Success).json({
-        message: 'User registred successfully'
+        message: 'User registred successfully',
+        userId
       })
 
 
