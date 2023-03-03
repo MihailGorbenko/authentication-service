@@ -30,7 +30,7 @@ refreshTokenRouter.post(
                 })
             }
 
-            const tokenRecord = await database.findRefrToken(refreshToken, true)
+            const tokenRecord = await database.findRefrToken(refreshToken,false)
 
             if (!tokenRecord) {
                 return res.status(ResponceStatus.NotAuthorized).json({

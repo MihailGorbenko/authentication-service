@@ -11,5 +11,7 @@ export default function createDatabase(){
         .then(() => log.info('Mongo DB connection successfull'))
     mongoose.connection.on('error', (err) => log.error(err))
 
-    return new Database()
+    const database = new Database()
+    database.close = () => {mongoose.connection.close()}
+    return database
 }

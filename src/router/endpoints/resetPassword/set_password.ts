@@ -29,8 +29,9 @@ setPasswordRouter.post(
                 });
             }
             const { password, token } = req.body
+            const database = req.database
 
-            const resetPasswordRecord = await ResetPasswordToken.findOne({ token })
+            const resetPasswordRecord = await database.findRPToken(token, true)
             /// Check if token exists
             if (!resetPasswordRecord) {
                 log.info('Reset token not found')
@@ -40,7 +41,8 @@ setPasswordRouter.post(
             }
             log.info('Token found')
             const userId = resetPasswordRecord.userId
-            const serviceUser = await ServiceUser.findById(userId)
+
+            const serviceUser = await database.findUserById(userId)
             if (!serviceUser) {
                 log.info('User not found')
                 return res.status(ResponceStatus.StorageError).json({
@@ -52,7 +54,7 @@ setPasswordRouter.post(
 
             serviceUser.password = hashedPassword
             await serviceUser.save()
-            await resetPasswordRecord.delete()
+
             log.info('Password reset')
             return res.status(ResponceStatus.Success).json({
                 message: 'Password reset'

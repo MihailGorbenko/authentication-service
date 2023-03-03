@@ -2,20 +2,25 @@ import request from 'supertest'
 import createApp from '../../src/app'
 import { randomUUID } from 'crypto'
 import createDatabase from '../../src/storage/db'
+import { DB } from '../../src/storage/db.api'
 
-let app:any
+let app: any
+let db: any
 
 beforeAll(async () => {
-   const db = createDatabase()
-   app = createApp(db)
+    db = createDatabase()
+    app = createApp(db)
 
+})
+afterAll(async() => {
+    db.close()
 })
 
 
 describe('POST /register', () => {
+   
 
     describe("when passed an email and password", () => {
-        //should create user in database with email and password
 
         test('should respond with status code 200', async () => {
             const email = randomUUID().toString().slice(0, 8)

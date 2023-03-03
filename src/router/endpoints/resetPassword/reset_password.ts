@@ -28,26 +28,24 @@ resetPasswordRouter.post(
             }
 
             const clientUrl = req.headers.origin
-        
+            const database = req.database
+
             //// Check if token already exists
-            let passwordToken = await ResetPasswordToken.findOne({ userId: user.id })
+            let passwordToken = await database.findRPTokenByUserId(user.id, false)
 
             if (!passwordToken) {
                 log.info('Reset password token not found. Generating...')
-                passwordToken = await new ResetPasswordToken({
-                    userId: user.id,
-                    token: crypto.randomUUID(),
-                    clientUrl
-                }).save()
+                passwordToken = await database.createNewRPToken(user.id, clientUrl!)
+                if (!passwordToken) throw new Error('Error creating RPToken')
             }
 
             const link = `${config.get('baseUrl')}/resetPasswordLink/${passwordToken.token}`
             const text = `Follow this link to reset password ${link}`
-            const html = htmlEmailTemplate.replace('$link',link)
-            await sendEmail(user.email.toString(),"Password reset",text,html)
+            const html = htmlEmailTemplate.replace('$link', link)
+            await sendEmail(user.email.toString(), "Password reset", text, html)
             log.info(`Email sent to ${user.email}`)
 
-            return res.status(ResponceStatus.Success).json({message:'Mail sent'})
+            return res.status(ResponceStatus.Success).json({ message: 'Mail sent' })
 
         } catch (e: Error | any) {
             log.error(`Error ${e?.message}`);
@@ -60,8 +58,8 @@ resetPasswordRouter.post(
 )
 
 
-const htmlEmailTemplate = 
-`<!DOCTYPE html>
+const htmlEmailTemplate =
+    `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">

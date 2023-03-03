@@ -15,9 +15,9 @@ resetPasswordLinkRouter.post(
     async (req: Request, res: Response) => {
         try {
             const token = req.params.token
-            console.log(req.params);
+            const database = req.database
 
-            const resetPasswordRecord = await ResetPasswordToken.findOne({ token })
+            const resetPasswordRecord = await database.findRPToken(token, false)
             if (!resetPasswordRecord) {
                 log.info('Reset token not found')
                 return res.status(ResponceStatus.BadRequest).json({
@@ -25,15 +25,6 @@ resetPasswordLinkRouter.post(
                 })
             }
             log.info('Token found')
-            res.cookie(
-                'userId',
-                resetPasswordRecord.userId,
-                {
-                    httpOnly: true,
-                    secure: true,
-                    maxAge: expire_in_ms['1hour'],
-                    sameSite: 'none'
-                })
 
             const redirectUrl = resetPasswordRecord.clientUrl.toString() +
                 config.get('resetPasswordClientUrl') +
