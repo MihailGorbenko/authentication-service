@@ -20,7 +20,6 @@ const userRegistred_1 = __importDefault(require("../../../middleware/userRegistr
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("config"));
-const RefreshToken_1 = __importDefault(require("../../../models/RefreshToken"));
 const expire_in_ms_1 = __importDefault(require("../../expire_in_ms"));
 const loginRouter = (0, express_1.Router)();
 const log = new log_1.default("Route: /login");
@@ -38,6 +37,7 @@ loginRouter.post("/", [userRegistred_1.default, (0, express_validator_1.body)("p
         ///////////////////////////////
         const { email, password } = req.body;
         const user = req.user;
+        const database = req.database;
         ///// Check user
         if (!user) {
             log.info(`User ${email} not registred`);
@@ -62,15 +62,9 @@ loginRouter.post("/", [userRegistred_1.default, (0, express_validator_1.body)("p
             expiresIn: "10m",
         });
         /// Check if an old refresh token exist
-        const oldRefreshToken = yield RefreshToken_1.default.findOne({ userId: user.id });
-        if (oldRefreshToken)
-            yield oldRefreshToken.deleteOne();
+        yield database.findRefrTokenByUserId(user.id, true);
         /////////////////
-        const refreshToken = jsonwebtoken_1.default.sign({}, config_1.default.get("jwtSecret"), {});
-        const RTRecord = new RefreshToken_1.default({ token: refreshToken, userId: user.id });
-        //// Recording refresh token
-        yield RTRecord.save();
-        ///////////////
+        const refreshToken = yield database.createNewRefrToken(user.id);
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,

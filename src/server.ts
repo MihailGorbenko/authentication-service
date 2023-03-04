@@ -18,11 +18,13 @@ const HTTPS_PORT = config.get('https_port')
 
 let db: DB | undefined
 
+let httpServer:http.Server
+
 try {
     db = createDatabase()
     const app = createApp(db)
 
-    http.createServer(app).listen(HTTP_PORT, () => log.info(`HTTP server listening on port ${HTTP_PORT}`))
+    httpServer = app.listen(HTTP_PORT, () => log.info(`HTTP server listening on port ${HTTP_PORT}`))
 
     https.createServer({
         key: fs.readFileSync(path.resolve(__dirname, 'sslcert/privkey.pem')),
@@ -36,5 +38,5 @@ try {
     process.exit(1)
 }
 
-
+export default httpServer
 

@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const RefreshToken_1 = __importDefault(require("../../../models/RefreshToken"));
 const log_1 = __importDefault(require("../../../utils/log"));
 const responce_status_1 = require("../../responce_status");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -24,13 +23,14 @@ const log = new log_1.default('Route /refreshToken');
 refreshTokenRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { refreshToken } = req.cookies;
+        const database = req.database;
         if (!refreshToken) {
             return res.status(responce_status_1.ResponceStatus.BadRequest).json({
                 message: 'Refresh token missing',
                 predicate: 'MISSING_TOKEN'
             });
         }
-        const tokenRecord = yield RefreshToken_1.default.findOne({ token: refreshToken });
+        const tokenRecord = yield database.findRefrToken(refreshToken, false);
         if (!tokenRecord) {
             return res.status(responce_status_1.ResponceStatus.NotAuthorized).json({
                 message: 'Refresh token not exists or already deprecated',
@@ -38,18 +38,13 @@ refreshTokenRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, fun
             });
         }
         const { userId } = tokenRecord;
-        yield tokenRecord.deleteOne();
         //// Genereting JWT pair
         const accessToken = jsonwebtoken_1.default.sign({
             id: userId
         }, config_1.default.get("jwtSecret"), {
             expiresIn: "10m",
         });
-        const newRefreshToken = jsonwebtoken_1.default.sign({}, config_1.default.get("jwtSecret"), {});
-        const RTRecord = new RefreshToken_1.default({ token: newRefreshToken, userId });
-        //// Recording refresh token
-        yield RTRecord.save();
-        ///////////////
+        const newRefreshToken = yield database.createNewRefrToken(userId);
         res.cookie('refreshToken', newRefreshToken, {
             httpOnly: true,
             secure: true,

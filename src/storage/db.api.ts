@@ -5,6 +5,9 @@ import JWT from 'jsonwebtoken'
 import config from 'config'
 import bcrypt from 'bcrypt'
 import ResetPasswordToken from "../models/ResetPasswordToken";
+import DevOrigin from "../models/DevOrigin";
+import PersistOrigin from "../models/PersistOrigin";
+import { Origin } from "../types/origin";
 
 export abstract class DB {
     abstract addServiceUser(user: IServiceUser): Promise<String>
@@ -16,11 +19,38 @@ export abstract class DB {
     abstract findRPTokenByUserId(userId: String, remove: boolean): Promise<RPTokenRecord>
     abstract findRPToken(token: String, remove: boolean): Promise<RPTokenRecord>
     abstract createNewRPToken(userId: string, clientUrl: String): Promise<RPTokenRecord>
-    close = () => {} 
+    abstract addAllowedOrigin(origin: String, dev: boolean): Promise<boolean>
+    abstract getAllowedOrigins(): Promise<Origin[]>
+    close = () => { }
 }
 
 
 export default class Database extends DB {
+
+    async addAllowedOrigin(origin: String, dev: boolean): Promise<boolean> {
+
+        const newOrigin = dev
+            ?
+            new DevOrigin({ origin })
+            :
+            new PersistOrigin({ origin })
+
+        const savedOrigin = await newOrigin.save()
+
+        return savedOrigin ? true : false
+    }
+
+    async getAllowedOrigins(): Promise<Origin[]> {
+        const origins: Origin[] = []
+        const persistOrigins = await PersistOrigin.find()
+        const devOrigins = await DevOrigin.find()
+        if(devOrigins)
+            devOrigins.forEach((doc) => { origins.push({ name: doc.origin, dev: true }) })
+        if(persistOrigins)
+            persistOrigins.forEach((doc) => { origins.push({ name: doc.origin, dev: false}) })
+        
+        return origins
+    }
 
     async findUserById(userId: Object): Promise<ServiceUserRecord> {
         const user = await ServiceUser.findOne(userId)

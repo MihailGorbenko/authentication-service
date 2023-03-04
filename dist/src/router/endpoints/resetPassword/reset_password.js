@@ -16,7 +16,6 @@ const express_1 = require("express");
 const log_1 = __importDefault(require("../../../utils/log"));
 const userRegistred_1 = __importDefault(require("../../../middleware/userRegistred"));
 const responce_status_1 = require("../../responce_status");
-const ResetPasswordToken_1 = __importDefault(require("../../../models/ResetPasswordToken"));
 const config_1 = __importDefault(require("config"));
 const sendEmail_1 = __importDefault(require("../../../utils/sendEmail"));
 const resetPasswordRouter = (0, express_1.Router)();
@@ -33,15 +32,14 @@ resetPasswordRouter.post('/', [userRegistred_1.default], (req, res) => __awaiter
             });
         }
         const clientUrl = req.headers.origin;
+        const database = req.database;
         //// Check if token already exists
-        let passwordToken = yield ResetPasswordToken_1.default.findOne({ userId: user.id });
+        let passwordToken = yield database.findRPTokenByUserId(user.id, false);
         if (!passwordToken) {
             log.info('Reset password token not found. Generating...');
-            passwordToken = yield new ResetPasswordToken_1.default({
-                userId: user.id,
-                token: crypto.randomUUID(),
-                clientUrl
-            }).save();
+            passwordToken = yield database.createNewRPToken(user.id, clientUrl);
+            if (!passwordToken)
+                throw new Error('Error creating RPToken');
         }
         const link = `${config_1.default.get('baseUrl')}/resetPasswordLink/${passwordToken.token}`;
         const text = `Follow this link to reset password ${link}`;

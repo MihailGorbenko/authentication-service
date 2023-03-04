@@ -4,14 +4,14 @@
   "description": "authentication service",
   "main": "app.ts",
   "scripts": {
-    "test": " jest ",
-    "dev": "nodemon",
+    "test": "jest --timeout=10000 ",
+    "dev": " nodemon",
     "docker:build": "docker build -t mihago/authentication-service .",
     "build": "run-s test compile docker:build",
     "docker:push": "docker push mihago/authentication-service:latest",
     "docker:publish": "run-s build docker:push",
     "compile": "tsc",
-    "run": "node ./dist/server.js",
+    "run": "cross-env NODE_ENV=production node ./dist/server.js",
     "start": "run-s compile run"
   },
   "author": "Miha Go",

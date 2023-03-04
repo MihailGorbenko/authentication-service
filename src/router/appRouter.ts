@@ -1,4 +1,5 @@
 import { Router } from "express";
+import path from "path";
 import registerRouter from "./endpoints/auth/register";
 import loginRouter from "./endpoints/auth/login";
 import checkEmailRouter from "./endpoints/auth/check_email";
@@ -15,9 +16,10 @@ serviceRouter
     .use('/refreshToken', refreshTokenRouter)
     .use('/resetPassword', resetPasswordRouter)
     .use('/resetPasswordLink', resetPasswordLinkRouter)
-    .use('/setPassword',setPasswordRouter)
+    .use('/setPassword', setPasswordRouter)
     .get("/:universalURL", (req, res) => {
         res.send("404 URL NOT FOUND");
-    });
+    })
+    .get('/', (req, res) => res.sendFile(path.resolve(__dirname, '../public/index.html')))
 
 export default serviceRouter;

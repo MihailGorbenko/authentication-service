@@ -14,12 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const express_validator_1 = require("express-validator");
-const ResetPasswordToken_1 = __importDefault(require("../../../models/ResetPasswordToken"));
 const log_1 = __importDefault(require("../../../utils/log"));
 const responce_status_1 = require("../../responce_status");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const config_1 = __importDefault(require("config"));
-const ServiceUser_1 = __importDefault(require("../../../models/ServiceUser"));
 const setPasswordRouter = (0, express_1.Router)();
 const log = new log_1.default('Route: /setPassword');
 setPasswordRouter.post('/', [
@@ -37,7 +35,8 @@ setPasswordRouter.post('/', [
             });
         }
         const { password, token } = req.body;
-        const resetPasswordRecord = yield ResetPasswordToken_1.default.findOne({ token });
+        const database = req.database;
+        const resetPasswordRecord = yield database.findRPToken(token, true);
         /// Check if token exists
         if (!resetPasswordRecord) {
             log.info('Reset token not found');
@@ -47,7 +46,7 @@ setPasswordRouter.post('/', [
         }
         log.info('Token found');
         const userId = resetPasswordRecord.userId;
-        const serviceUser = yield ServiceUser_1.default.findById(userId);
+        const serviceUser = yield database.findUserById(userId);
         if (!serviceUser) {
             log.info('User not found');
             return res.status(responce_status_1.ResponceStatus.StorageError).json({
@@ -58,7 +57,6 @@ setPasswordRouter.post('/', [
         const hashedPassword = bcrypt_1.default.hashSync(password, config_1.default.get('passwordSalt'));
         serviceUser.password = hashedPassword;
         yield serviceUser.save();
-        yield resetPasswordRecord.delete();
         log.info('Password reset');
         return res.status(responce_status_1.ResponceStatus.Success).json({
             message: 'Password reset'
