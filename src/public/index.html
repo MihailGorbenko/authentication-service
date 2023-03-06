@@ -29,17 +29,15 @@
         }
 
         .main_container {
-            background-color: rgba(177, 210, 239, 0.85);
-            box-shadow: 0 0 30px 5px rgba(27, 27, 27, 1);
-            height: 100vh;
-            width: 60%;
-            margin-top: 8vh;
-            border-radius: 8px;
+          
         }
 
         .form_container {
-            width: 80%;
-            height: 100%;
+            background-color: rgba(177, 210, 239, 0.85);
+            box-shadow: 0 0 30px 5px rgba(27, 27, 27, 1);
+            height: 100vh;
+            margin-top: 8vh;
+            border-radius: 8px;
 
         }
 
@@ -184,60 +182,68 @@
 
         .flag {
             position: absolute;
-            right: 2em;
-            top:.5em;
+            right: -.5em;
+            top: .5em;
+
         }
     </style>
     <div class="container main_container">
+        <div class="row justify-content-center">
+            <div class="col-md-9 col-lg-7">
+                <div class="container form_container">
+                    <div class="row form_wrapper">
 
-        <div class="container form_container">
-            <div class="row form_wrapper">
+                        <form class="form" id="form">
+                            <div class="alert  mb-4 d-none shadow-lg" role="alert" id="alert">
+                                A simple primary alert—check it out!
+                            </div>
+                            <h1 class="form_title">Add Origin</h1>
+                            <div class="input-group mb-3 login">
+                                <button class="btn btn-primary dropdown-toggle form-button" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">Login</button>
+                                <ul class="dropdown-menu">
+                                    <li><span class="dropdown-item">Admin</span></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><span class="dropdown-item">Dev</span></li>
+                                </ul>
+                                <input type="text" class="form-control " id="login_input" disabled>
+                            </div>
 
-                <form class="form" id="form">
-                    <div class="alert  mb-4 d-none shadow-lg" role="alert" id="alert">
-                        A simple primary alert—check it out!
+                            <div class="form-floating">
+                                <input type="password" class="form-control mb-3" id="password_input"
+                                    placeholder="Password...">
+                                <label for="password_input">Password</label>
+                            </div>
+                            <div class="input-group mb-3 origin-input">
+                                <button class="btn btn-primary form-button" type="button" id="ip_button">Use
+                                    current</button>
+                                <input type="text" class="form-control" placeholder="Origin..." id="origin_input">
+                                <span id="flag" class="flag"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary form-button mb-2"
+                                id="submit_button">Add</button>
+                            <div class="lds-spinner  d-none">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </form>
                     </div>
-                    <h1 class="form_title">Add Origin</h1>
-                    <div class="input-group mb-3 login">
-                        <button class="btn btn-primary dropdown-toggle form-button" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">Login</button>
-                        <ul class="dropdown-menu">
-                            <li><span class="dropdown-item">Admin</span></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><span class="dropdown-item">Dev</span></li>
-                        </ul>
-                        <input type="text" class="form-control " id="login_input" disabled>
-                    </div>
-
-                    <div class="form-floating">
-                        <input type="password" class="form-control mb-3" id="password_input" placeholder="Password...">
-                        <label for="password_input">Password</label>
-                    </div>
-                    <div class="input-group mb-3 origin-input">
-                        <button class="btn btn-primary form-button" type="button" id="ip_button">Use current</button>
-                        <input type="text" class="form-control" placeholder="Origin..." id="origin_input">
-                        <span id="flag" class="flag"></span>
-                    </div>
-                    <button type="submit" class="btn btn-primary form-button mb-2" id="submit_button">Add</button>
-                    <div class="lds-spinner  d-none">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
+
     </div>
 
     <script>
