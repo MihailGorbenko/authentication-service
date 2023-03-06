@@ -9,6 +9,7 @@ import resetPasswordLinkRouter from "./endpoints/resetPassword/reset_password_li
 import setPasswordRouter from "./endpoints/resetPassword/set_password";
 import addOriginRouter from "./endpoints/settings/addOrigin";
 import { ResponceStatus } from "../types/responce_status";
+import allowedOriginsRouter from "./endpoints/settings/getAllowedOrigins";
 
 const serviceRouter = Router();
 serviceRouter
@@ -20,6 +21,7 @@ serviceRouter
     .use('/resetPasswordLink', resetPasswordLinkRouter)
     .use('/setPassword', setPasswordRouter)
     .use('/addOrigin', addOriginRouter)
+    .use('/getAllowedOrigins',allowedOriginsRouter)
     .get('/', (req, res) => res.sendFile(path.resolve(__dirname, '../public/index.html')))
     
 
