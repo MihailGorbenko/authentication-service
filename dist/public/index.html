@@ -1,24 +1,561 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;1,700;1,900&display=swap"
+        rel="stylesheet">
     <title>Settings</title>
 </head>
+
 <body>
     <style>
         body {
-            
+            background-image: url('./background_stars.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: 'Roboto', sans-serif;
+            height: 110vh;
+
+        }
+
+        .main_container {}
+
+        .form_container {
+            background-color: rgba(177, 210, 239, 0.85);
+            box-shadow: 0 0 30px 5px rgba(27, 27, 27, 1);
+            height: 100vh;
+            margin-top: 8vh;
+            border-radius: 8px;
+
+        }
+
+        .form_wrapper {
+            height: 100%;
+            align-items: top;
+        }
+
+        .form_title {
+            font-weight: 900;
+            color: rgb(1, 1, 35);
+            font-size: 1.5em;
+
+        }
+
+        .form-control,
+        .form-control:disabled {
+            box-shadow: 0 0 10px 2px rgba(62, 61, 61, 0.523);
+            background-color: rgba(245, 245, 245, 0.539);
+        }
+
+        .dropdown-item {
+            cursor: pointer;
+        }
+
+        .form-button {
+            box-shadow: 0 0 10px 2px rgba(62, 61, 61, 0.523);
+        }
+
+        #submit_button {
+            width: fit-content;
+
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            margin-top: 2em;
+        }
+
+        .lds-spinner {
+            color: official;
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+        }
+
+        .lds-spinner div {
+            transform-origin: 40px 40px;
+            animation: lds-spinner 1.2s linear infinite;
+        }
+
+        .lds-spinner div:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 3px;
+            left: 37px;
+            width: 6px;
+            height: 18px;
+            border-radius: 20%;
+            background: #0d6efd;
+        }
+
+        .lds-spinner div:nth-child(1) {
+            transform: rotate(0deg);
+            animation-delay: -1.1s;
+        }
+
+        .lds-spinner div:nth-child(2) {
+            transform: rotate(30deg);
+            animation-delay: -1s;
+        }
+
+        .lds-spinner div:nth-child(3) {
+            transform: rotate(60deg);
+            animation-delay: -0.9s;
+        }
+
+        .lds-spinner div:nth-child(4) {
+            transform: rotate(90deg);
+            animation-delay: -0.8s;
+        }
+
+        .lds-spinner div:nth-child(5) {
+            transform: rotate(120deg);
+            animation-delay: -0.7s;
+        }
+
+        .lds-spinner div:nth-child(6) {
+            transform: rotate(150deg);
+            animation-delay: -0.6s;
+        }
+
+        .lds-spinner div:nth-child(7) {
+            transform: rotate(180deg);
+            animation-delay: -0.5s;
+        }
+
+        .lds-spinner div:nth-child(8) {
+            transform: rotate(210deg);
+            animation-delay: -0.4s;
+        }
+
+        .lds-spinner div:nth-child(9) {
+            transform: rotate(240deg);
+            animation-delay: -0.3s;
+        }
+
+        .lds-spinner div:nth-child(10) {
+            transform: rotate(270deg);
+            animation-delay: -0.2s;
+        }
+
+        .lds-spinner div:nth-child(11) {
+            transform: rotate(300deg);
+            animation-delay: -0.1s;
+        }
+
+        .lds-spinner div:nth-child(12) {
+            transform: rotate(330deg);
+            animation-delay: 0s;
+        }
+
+        @keyframes lds-spinner {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .origin-input {
+            position: relative;
+        }
+
+        .flag {
+            position: absolute;
+            right: -.5em;
+            top: .5em;
+
+        }
+
+        .actions-block {
+            justify-content: space-between;
+            margin: 0 0;
+        }
+
+        #list_button {
+            width: fit-content;
+
+        }
+
+        .list-block {
+            justify-content: center;
+            margin: 0 0;
+           
+        }
+
+        #origin_list {
+            list-style: none;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: rgba(245, 245, 245, 0.539);
+            border-radius: 8px;
+            padding: 1em .5em;
+            box-shadow: 0 0 10px 2px rgba(62, 61, 61, 0.523);
+            overflow:scroll;
+            max-height: 300px;
+        }
+
+        hr {
+            margin: 3px 0;
+        }
+
+        .origin-list-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .origin-list-item-label {
+            background-color: #198754;
+            color: whitesmoke;
+            border-radius:3px;
+            font-size: .7em;
+            padding: 2px;
+            box-shadow: 0 0 10px 2px rgba(62, 61, 61, 0.523);
         }
     </style>
-    <div class="container">
-        <div class="row">
+    <div class="container main_container">
+        <div class="row justify-content-center">
+            <div class="col-md-9 col-lg-7">
+                <div class="container form_container">
+                    <div class="row form_wrapper">
+                        <form class="form" id="form">
+                            <div class="alert  mb-4 d-none shadow-lg" role="alert" id="alert">
+                                A simple primary alert—check it out!
+                            </div>
+                            <h1 class="form_title">Add Origin</h1>
+                            <div class="input-group mb-3 login">
+                                <button class="btn btn-primary dropdown-toggle form-button" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">Login</button>
+                                <ul class="dropdown-menu">
+                                    <li><span class="dropdown-item">Admin</span></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><span class="dropdown-item">Dev</span></li>
+                                </ul>
+                                <input type="text" class="form-control " id="login_input" disabled>
+                            </div>
 
+                            <div class="form-floating">
+                                <input type="password" class="form-control mb-3" id="password_input"
+                                    placeholder="Password...">
+                                <label for="password_input">Password</label>
+                            </div>
+                            <div class="input-group mb-3 origin-input">
+                                <button class="btn btn-primary form-button" type="button" id="ip_button">Use
+                                    current</button>
+                                <input type="text" class="form-control" placeholder="Origin..." id="origin_input">
+                                <span id="flag" class="flag"></span>
+                            </div>
+                            <div class="row actions-block">
+                                <button type="button" class="btn btn-primary form-button mb-2" id="list_button">Origin
+                                    list</button>
+                                <button type="submit" class="btn btn-primary form-button mb-2"
+                                    id="submit_button">Add</button>
+                            </div>
+                            <div class="lds-spinner mb-3 d-none">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <div class="row list-block">
+                                <ul id="origin_list" class="d-none">
+                                   
+                                </ul>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
+
+    <script>
+        const form = document.querySelector('#form')
+        const flag = document.querySelector('#flag')
+        const originList = document.querySelector('#origin_list')
+        const addButton = document.querySelector('#submit_button')
+        const listButton = document.querySelector('#list_button')
+        const useCurrent = document.querySelector('#ip_button')
+        const loginInput = document.querySelector('#login_input')
+        const passwordInput = document.querySelector('#password_input')
+        const originInput = document.querySelector('#origin_input')
+        const loginMenu = document.querySelector('.dropdown-menu')
+
+        const serverOrigin =  window.origin
+        const urlRegex = /^https?:\/\/(.*)/
+
+        function toggleLoader() {
+            document.querySelector('.lds-spinner').classList.toggle('d-none')
+        }
+        function offLoader() {
+            document.querySelector('.lds-spinner').classList.add('d-none')
+
+        }
+        function setInvalid(input) {
+            input.classList.add('is-invalid')
+        }
+        function setValid(input) {
+            input.classList.add('is-valid')
+        }
+        function clearInputs(inputs) {
+            inputs.forEach(inp => {
+                inp.classList.remove('is-valid')
+                inp.classList.remove('is-invalid')
+            })
+        }
+        function showAlert(text, type) {
+            const alert = document.querySelector('.alert')
+            alert.textContent = text
+            alert.classList.remove('alert-danger')
+            alert.classList.remove('alert-success')
+            alert.classList.add(`alert-${type}`)
+            alert.classList.remove('d-none')
+
+            const timeout = setTimeout(() => {
+                alert.classList.add('d-none')
+                clearTimeout(timeout)
+            }, 3000)
+        }
+        function hideAlert() {
+            document.querySelector('.alert').classList.add('d-none')
+        }
+
+        function inflateOriginsList(array) {
+            originList.classList.remove('d-none')
+            originList.replaceChildren('')
+            array.forEach(item => {
+                const li = document.createElement('li')
+                const hr = document.createElement('hr')
+                const labelSpan = document.createElement('span')
+                const originSpan = document.createElement('span')
+                li.classList.add('origin-list-item')
+                labelSpan.classList.add('origin-list-item-label')
+                originSpan.textContent = item.name
+                li.appendChild(originSpan)
+                if (item.dev) {
+                    labelSpan.textContent = 'dev'
+                    li.appendChild(labelSpan)
+                }
+                originList.appendChild(li)
+                originList.appendChild(hr)
+
+            })
+        }
+
+        
+
+
+        loginMenu.addEventListener('click', (event) => {
+            if (event.target.tagName !== 'SPAN') return
+            loginInput.value = event.target.textContent
+        })
+        useCurrent.addEventListener('click', async (event) => {
+
+            toggleLoader()
+            showAlert("Please off addBlock if it not working", 'primary')
+            await fetch("https://api.ipdata.co?api-key=308456040ea7c53c404ef91c5eccc066f24882838e6858146ed073cf", {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res);
+                    originInput.value = `https://${res.ip}`
+                    flag.textContent = res.emoji_flag
+                    offLoader()
+                })
+                .catch(err => offLoader())
+            offLoader()
+
+
+        })
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault()
+            hideAlert()
+            clearInputs([loginInput, originInput, passwordInput])
+            const login = loginInput.value
+            const password = passwordInput.value
+            const origin = originInput.value
+            if (login.length < 1) {
+                showAlert('Select login to continue!', 'danger')
+                setInvalid(loginInput)
+                return
+            }
+            setValid(loginInput)
+            if (password.length < 5) {
+                showAlert('Enter password to continue', 'danger')
+                setInvalid(passwordInput)
+                return
+            }
+            setValid(passwordInput)
+
+            if (!origin.match(urlRegex)) {
+                showAlert('Enter correct origin to continue', 'danger')
+                setInvalid(originInput)
+                return
+            }
+            setValid(originInput)
+
+            let resStatus;
+            toggleLoader()
+
+            fetch(`${serverOrigin}/addOrigin`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    login,
+                    password,
+                    origin
+                })
+
+            })
+                .then(res => {
+                    resStatus = res.status
+                    return res.json()
+                })
+                .then(res => {
+                    switch (resStatus) {
+                        case 200: {
+                            showAlert('Added successfully', 'success')
+                            break
+                        }
+                        case 401: {
+                            showAlert(res.message, 'danger')
+                            setInvalid(passwordInput)
+                            break
+                        }
+                        case 507: {
+                            showAlert('Internal storage error', 'danger')
+                            break
+                        }
+                        case 500: {
+                            showAlert("Can't add origin, it may already exist", 'danger')
+                            setInvalid(originInput)
+                            break
+                        }
+                        case 400: {
+                            showAlert(res.message, 'danger')
+                            break
+                        }
+                        default: break
+                    }
+                    clearInputs([loginInput, passwordInput, originInput])
+                    offLoader()
+                })
+                .catch(err => {
+                    console.log(err);
+                    showAlert("Can't add origin, it may already exist", 'danger')
+                    offLoader()
+                })
+        })
+
+        listButton.addEventListener('click', (event) => {
+            hideAlert()
+            clearInputs([loginInput, originInput, passwordInput])
+            const login = loginInput.value
+            const password = passwordInput.value
+
+            if (login.length < 1) {
+                showAlert('Select login to continue!', 'danger')
+                setInvalid(loginInput)
+                return
+            }
+            setValid(loginInput)
+            if (password.length < 5) {
+                showAlert('Enter password to continue', 'danger')
+                setInvalid(passwordInput)
+                return
+            }
+            setValid(passwordInput)
+
+            let resStatus;
+            toggleLoader()
+
+            fetch(`${serverOrigin}/getAllowedOrigins`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    login,
+                    password,
+                })
+
+            })
+                .then(res => {
+                    resStatus = res.status
+                    return res.json()
+                })
+                .then(res => {
+                    console.log(res);
+                    switch (resStatus) {
+                        case 200: {
+                            inflateOriginsList(res.origins)
+                            break
+                        }
+                        case 401: {
+                            showAlert(res.message, 'danger')
+                            setInvalid(passwordInput)
+                            break
+                        }
+                        case 507: {
+                            showAlert('Internal storage error', 'danger')
+                            break
+                        }
+                        case 500: {
+                            showAlert("Server error", 'danger')
+                            setInvalid(originInput)
+                            break
+                        }
+                        case 400: {
+                            showAlert(res.message, 'danger')
+                            break
+                        }
+                        default: break
+                    }
+                    clearInputs([loginInput, passwordInput, originInput])
+                    offLoader()
+                })
+                .catch(err => {
+                    console.log(err);
+                    showAlert("Server error", 'danger')
+                    offLoader()
+                })
+
+        })
+    </script>
 </body>
+
+
 </html>
