@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
 import ResetPasswordToken from "../../../models/ResetPasswordToken";
 import Log from "../../../utils/log";
-import { ResponceStatus } from "../../responce_status";
+import { ResponceStatus } from "../../../types/responce_status";
 import bcrypt from 'bcrypt'
 import config from 'config'
 import ServiceUser from "../../../models/ServiceUser";

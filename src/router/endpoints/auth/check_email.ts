@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import { Error } from "mongoose";
 import userRegistred from "../../../middleware/userRegistred";
 import Log from "../../../utils/log";
-import { ResponceStatus } from "../../responce_status";
+import { ResponceStatus } from "../../../types/responce_status";
 
 
 

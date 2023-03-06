@@ -2,7 +2,7 @@ import { Request, Response, Router, urlencoded } from "express";
 import Log from "../../../utils/log";
 import userRegistred from '../../../middleware/userRegistred'
 import { body, validationResult } from 'express-validator'
-import { ResponceStatus } from "../../responce_status";
+import { ResponceStatus } from "../../../types/responce_status";
 import ResetPasswordToken from "../../../models/ResetPasswordToken";
 import config from 'config'
 import sendEmail from "../../../utils/sendEmail";

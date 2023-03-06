@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Error } from "mongoose";
 import ServiceUser from "../models/ServiceUser";
-import { ResponceStatus } from "../router/responce_status";
+import { ResponceStatus } from "../types/responce_status";
 import Log from "../utils/log";
 
 const log = new Log("Middleware: allowedEmail");

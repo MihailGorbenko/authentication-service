@@ -1,14 +1,14 @@
 import { Request, Response, Router } from "express";
 import Log from "../../../utils/log";
 import { body, validationResult } from "express-validator";
-import { ResponceStatus } from "../../responce_status";
+import { ResponceStatus } from "../../../types/responce_status";
 import userRegistred from "../../../middleware/userRegistred";
 import { Error } from "mongoose";
 import bcrypt from "bcrypt";
 import JWT from "jsonwebtoken";
 import config from "config";
 import RefreshToken from "../../../models/RefreshToken";
-import expire_in_ms from "../../expire_in_ms";
+import expire_in_ms from "../../../types/expire_in_ms";
 
 const loginRouter = Router();
 const log = new Log("Route: /login");

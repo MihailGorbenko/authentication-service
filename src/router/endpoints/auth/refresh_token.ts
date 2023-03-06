@@ -3,10 +3,10 @@ import errors from "formidable/FormidableError";
 import { Error } from "mongoose";
 import RefreshToken from "../../../models/RefreshToken";
 import Log from "../../../utils/log";
-import { ResponceStatus } from "../../responce_status";
+import { ResponceStatus } from "../../../types/responce_status";
 import JWT from 'jsonwebtoken'
 import config from 'config'
-import expire_in_ms from "../../expire_in_ms";
+import expire_in_ms from "../../../types/expire_in_ms";
 
 
 const refreshTokenRouter = Router()

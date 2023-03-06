@@ -7,6 +7,8 @@ import refreshTokenRouter from "./endpoints/auth/refresh_token";
 import resetPasswordRouter from "./endpoints/resetPassword/reset_password";
 import resetPasswordLinkRouter from "./endpoints/resetPassword/reset_password_link";
 import setPasswordRouter from "./endpoints/resetPassword/set_password";
+import addOriginRouter from "./endpoints/settings/addOrigin";
+import { ResponceStatus } from "../types/responce_status";
 
 const serviceRouter = Router();
 serviceRouter
@@ -17,9 +19,8 @@ serviceRouter
     .use('/resetPassword', resetPasswordRouter)
     .use('/resetPasswordLink', resetPasswordLinkRouter)
     .use('/setPassword', setPasswordRouter)
-    .get("/:universalURL", (req, res) => {
-        res.send("404 URL NOT FOUND");
-    })
+    .use('/addOrigin', addOriginRouter)
     .get('/', (req, res) => res.sendFile(path.resolve(__dirname, '../public/index.html')))
+    
 
 export default serviceRouter;

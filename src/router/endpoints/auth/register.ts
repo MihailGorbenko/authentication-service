@@ -4,7 +4,7 @@ import { body, validationResult } from "express-validator";
 import config from "config";
 import Log from "../../../utils/log";
 import ServiceUser from "../../../models/ServiceUser";
-import { ResponceStatus } from "../../responce_status";
+import { ResponceStatus } from "../../../types/responce_status";
 import { Router } from "express";
 import allowedEmail from "../../../middleware/userRegistred";
 

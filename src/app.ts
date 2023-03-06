@@ -6,6 +6,7 @@ import serviceRouter from './router/appRouter'
 import { DB } from './storage/db.api'
 import attachDatabase from './middleware/attachDatabase'
 import httpsRredirect from './middleware/httpsRredirect'
+import path from 'path'
 
 
 
@@ -27,6 +28,10 @@ export default function createApp(db: DB) {
     app.use(cookieParser())
     app.use(attachDatabase(db))
     app.use('/', serviceRouter)
+    app.use(express.static(path.resolve(__dirname,'./public')))
+    app.get("/:universalURL", (req, res) => {
+        res.send("404 URL NOT FOUND");
+    })
 
     return app
 }
