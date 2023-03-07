@@ -1,44 +1,92 @@
 import { randomUUID } from 'crypto'
-import httpServer from '../../src/server'
 import supertest from 'supertest'
-
+import Database, { DB } from '../../src/storage/database'
+import http from 'http'
+import createApp from '../../src/app'
+import createDatabase from '../../src/storage/createDatabase'
 
 let request: supertest.SuperAgentTest
 jest.setTimeout(20000)
 
+let httpServer: http.Server
+let db: Database
+
 beforeAll(async () => {
-    request = supertest.agent(httpServer)
+    db = await createDatabase()
+    const app = createApp(db)
+    request = supertest.agent(app)
 })
 
 afterAll((done) => {
-    httpServer.close(done)
+      db.close().then(done())
 })
 
 
 describe('POST /register', () => {
 
+    describe("when passed correct an email and password", () => {
 
-    describe("when passed an email and password", () => {
+        describe("when user with such email not exists", () => {
+            let res: any
 
-        test('should respond with status code 200', async () => {
-            const email = randomUUID().toString().slice(0, 8)
-            const res = await request
-                .post('/register')
-                .send({
-                    email: `${email}@gmail.com`,
-                    password: '1234345'
-                })
+            beforeAll(async () => {
+                const email = randomUUID().toString().slice(0, 8)
+                res = await request
+                    .post('/register')
+                    .send({
+                        email: `${email}@gmail.com`,
+                        password: '1234345'
+                    })
 
-            expect(res.headers['content-type']).toEqual(expect.stringContaining('json'))
-            expect(res.status).toBe(200)
-            expect(res.body.message).toBeDefined()
-            expect(res.body.userId).toBeDefined()
+            })
+
+            test('should respond with status code 200', async () => {
+                expect(res.status).toBe(200)
+            })
+
+            test('should set header "Content-Type" to json', async () => {
+                expect(res.headers['content-type']).toEqual(expect.stringContaining('json'))
+            })
+
+            test('should respond an object with defined {message} and {userId} fields ', async () => {
+                expect(res.body.message).toBeDefined()
+                expect(res.body.userId).toBeDefined()
+            })
+        })
+
+        describe("when user with such email already exists", () => {
+            let res: any
+            beforeAll(async () => {
+                res = await request
+                    .post('/register')
+                    .send({
+                        email: `gomihagle@gmail.com`,
+                        password: '1234345'
+                    })
+            })
+
+            test('should resppond with status code 400', () => {
+                expect(res.statusCode).toBe(400)
+            })
+
+            test('should set header "Content-Type" to json', () => {
+                expect(res.headers['content-type']).toEqual(expect.stringContaining('json'))
+            })
+            test('should respond object with {message} and {predicate} fields', () => {
+                expect(res.body.message).toBeDefined()
+                expect(res.body.predicate).toBeDefined()
+            })
+            test('{predicate} field os response object must contain "EXIST" value', () => {
+                expect(res.body.predicate).toEqual(expect.stringContaining('EXIST'))
+            })
+
         })
 
     })
 
 
     describe("when email or password is missing", () => {
+
 
         test('', () => {
 
@@ -61,28 +109,6 @@ describe('POST /register', () => {
 
         })
     })
-
-
-
-
-    describe("when user with such email already exists", () => {
-        test('', async () => {
-
-            const res = await request
-                .post('/register')
-                .send({
-                    email: `gomihagle@gmail.com`,
-                    password: '1234345'
-                })
-
-            expect(res.statusCode).toBe(400)
-            expect(res.body.message).toBeDefined()
-            expect(res.headers['content-type']).toEqual(expect.stringContaining('json'))
-            expect(res.body.predicate).toEqual(expect.stringContaining('EXIST'))
-        })
-
-    })
-
 
 
     describe("when email or password invalid", () => {

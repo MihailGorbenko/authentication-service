@@ -30,7 +30,7 @@ refreshTokenRouter.post(
                 })
             }
 
-            const tokenRecord = await database.findRefrToken(refreshToken,false)
+            const tokenRecord = await database.findRefrToken(refreshToken,true)
 
             if (!tokenRecord) {
                 return res.status(ResponceStatus.NotAuthorized).json({
@@ -50,7 +50,7 @@ refreshTokenRouter.post(
                     expiresIn: "10m",
                 }
             );
-
+            
             const newRefreshToken = await database.createNewRefrToken(userId)
 
             res.cookie('refreshToken',

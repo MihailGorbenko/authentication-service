@@ -3,15 +3,13 @@ import cookieParser from 'cookie-parser'
 import express from 'express'
 import cors from 'cors'
 import serviceRouter from './router/appRouter'
-import { DB } from './storage/db.api'
+import Database, { DB } from './storage/database'
 import attachDatabase from './middleware/attachDatabase'
 import httpsRredirect from './middleware/httpsRredirect'
 import path from 'path'
 
 
-
-
-export default function createApp(db: DB) {
+export default function createApp(db: Database) {
     const app = express()
 
     app.use(cors(

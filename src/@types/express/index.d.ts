@@ -1,6 +1,6 @@
 import { IServiceUser } from "../../models/ServiceUser";
 import { Document, Types } from "mongoose";
-import { DB } from "../../storage/db.api";
+import { DB } from "../../storage/database";
 import { ServiceUserRecord } from "../../types/databaseRecords";
 
 export { }

@@ -8,6 +8,8 @@ import ResetPasswordToken from "../models/ResetPasswordToken";
 import DevOrigin from "../models/DevOrigin";
 import PersistOrigin from "../models/PersistOrigin";
 import { Origin } from "../types/origin";
+import Log from "../utils/log";
+import mongoose from "mongoose";
 
 export abstract class DB {
     abstract addServiceUser(user: IServiceUser): Promise<String>
@@ -21,11 +23,37 @@ export abstract class DB {
     abstract createNewRPToken(userId: string, clientUrl: String): Promise<RPTokenRecord>
     abstract addAllowedOrigin(origin: String, dev: boolean): Promise<boolean>
     abstract getAllowedOrigins(): Promise<Origin[]>
-    close = () => { }
+    abstract close():Promise<void>
+    abstract connect():Promise<void>
 }
 
 
 export default class Database extends DB {
+    connection: mongoose.Connection | null;
+
+    constructor() {
+        super()
+        this.connection = null
+    }
+    async connect():Promise<void>{
+        const log = new Log("Database")
+
+        mongoose.set('strictQuery', false)
+        mongoose.connection.on('error', (err) => log.error(err))
+        await mongoose.connect(config.get('mongoUri'))
+        log.info('Mongo DB connection successfull')
+        
+        this.connection = mongoose.connection
+    }
+
+
+    async close():Promise<void> {
+        if (this.connection){
+            await this.connection.close()
+            this.connection = null
+        }
+       
+    }
 
     async addAllowedOrigin(origin: String, dev: boolean): Promise<boolean> {
 
@@ -44,11 +72,11 @@ export default class Database extends DB {
         const origins: Origin[] = []
         const persistOrigins = await PersistOrigin.find()
         const devOrigins = await DevOrigin.find()
-        if(devOrigins)
+        if (devOrigins)
             devOrigins.forEach((doc) => { origins.push({ name: doc.origin, dev: true }) })
-        if(persistOrigins)
-            persistOrigins.forEach((doc) => { origins.push({ name: doc.origin, dev: false}) })
-        
+        if (persistOrigins)
+            persistOrigins.forEach((doc) => { origins.push({ name: doc.origin, dev: false }) })
+
         return origins
     }
 
