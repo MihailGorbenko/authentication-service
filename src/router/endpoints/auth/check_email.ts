@@ -18,7 +18,7 @@ checkEmailRouter.post(
             const status = req.user ? ResponceStatus.Success : ResponceStatus.NotAuthorized
             const responseObj = {
                 message: req.user ? 'User registred' : 'User not registred',
-                predicate: req.user ? 'EXISTS' : 'NOT_EXISTS'
+                predicate: req.user ? 'EXIST' : 'NOT_EXISTS'
             }
 
             return res.status(status).json(responseObj)

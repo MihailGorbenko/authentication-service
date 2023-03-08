@@ -40,10 +40,10 @@ export default class Database extends DB {
 
         mongoose.set('strictQuery', false)
         mongoose.connection.on('error', (err) => log.error(err))
-        await mongoose.connect(config.get('mongoUri'))
-        log.info('Mongo DB connection successfull')
-        
+        mongoose.connection.once('open',() => log.info('Mongo DB connection successfull'))
         this.connection = mongoose.connection
+        await mongoose.connect(config.get('mongoUri'))
+           
     }
 
 
