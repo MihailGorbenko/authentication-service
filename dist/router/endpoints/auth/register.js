@@ -12,12 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const express_validator_1 = require("express-validator");
-const config_1 = __importDefault(require("config"));
 const log_1 = __importDefault(require("../../../utils/log"));
-const ServiceUser_1 = __importDefault(require("../../../models/ServiceUser"));
-const responce_status_1 = require("../../responce_status");
+const responce_status_1 = require("../../../types/responce_status");
 const express_1 = require("express");
 const userRegistred_1 = __importDefault(require("../../../middleware/userRegistred"));
 const registerRouter = (0, express_1.Router)();
@@ -38,6 +35,7 @@ registerRouter.post("/", [
         }
         //////////////////////////////////////////
         const { email, password } = req.body;
+        const database = req.database;
         ///// Check email 
         if (req.user) {
             log.info(`User ${email} already exists`);
@@ -48,11 +46,10 @@ registerRouter.post("/", [
         }
         //// Create new service user
         log.info(`Creating service user ${email}`);
-        const hashPswd = bcrypt_1.default.hashSync(password, config_1.default.get("passwordSalt"));
-        const serviceUser = new ServiceUser_1.default({ email, password: hashPswd });
-        yield serviceUser.save();
+        const userId = yield database.addServiceUser({ email, password });
         return res.status(responce_status_1.ResponceStatus.Success).json({
-            message: 'User registred successfully'
+            message: 'User registred successfully',
+            userId
         });
         ////////////////////////////////////////////
     }

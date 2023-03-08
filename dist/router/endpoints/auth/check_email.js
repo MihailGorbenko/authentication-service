@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const userRegistred_1 = __importDefault(require("../../../middleware/userRegistred"));
 const log_1 = __importDefault(require("../../../utils/log"));
-const responce_status_1 = require("../../responce_status");
+const responce_status_1 = require("../../../types/responce_status");
 const checkEmailRouter = (0, express_1.Router)();
 const log = new log_1.default('Route: /checkEmail');
 checkEmailRouter.post('/', [userRegistred_1.default], (req, res) => {
@@ -14,7 +14,7 @@ checkEmailRouter.post('/', [userRegistred_1.default], (req, res) => {
         const status = req.user ? responce_status_1.ResponceStatus.Success : responce_status_1.ResponceStatus.NotAuthorized;
         const responseObj = {
             message: req.user ? 'User registred' : 'User not registred',
-            predicate: req.user ? 'EXISTS' : 'NOT_EXISTS'
+            predicate: req.user ? 'EXIST' : 'NOT_EXISTS'
         };
         return res.status(status).json(responseObj);
     }

@@ -12,22 +12,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const ServiceUser_1 = __importDefault(require("../models/ServiceUser"));
-const responce_status_1 = require("../router/responce_status");
+const responce_status_1 = require("../types/responce_status");
 const log_1 = __importDefault(require("../utils/log"));
 const log = new log_1.default("Middleware: allowedEmail");
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 function default_1(req, res, next) {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const email = (_a = req.body) === null || _a === void 0 ? void 0 : _a.email;
+        const email = req.body.email;
+        const database = req.database;
         if (email) {
             if (email.toLowerCase().match(emailRegex)) {
                 try {
-                    const candidate = yield ServiceUser_1.default.findOne({ email }).exec();
-                    if (candidate) {
+                    const user = yield database.findUserByEmail(email);
+                    if (user) {
                         log.info("Email already exists");
-                        req.user = candidate;
+                        req.user = user;
                     }
                     else {
                         req.user = null;
@@ -44,14 +43,16 @@ function default_1(req, res, next) {
             else {
                 return res.status(responce_status_1.ResponceStatus.BadRequest).json({
                     message: "Email incorect",
-                    predicate: "INCORRECT",
+                    predicate: "INCORECT",
+                    errors: []
                 });
             }
         }
         else {
             return res.status(responce_status_1.ResponceStatus.BadRequest).json({
                 message: "Email required",
-                predicate: "EMPTY_EMAIL",
+                predicate: "INCORECT",
+                errors: []
             });
         }
     });
