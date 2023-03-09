@@ -15,7 +15,7 @@ registerRouter.post(
   "/",
   [
     allowedEmail,
-    body("password", "bad password").isString().isLength({ min: 5 }),
+    body("password", "bad password").isString().isLength({ min: 5,max:20 }),
   ],
   async (req: Request, res: Response) => {
 

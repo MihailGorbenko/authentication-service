@@ -119,9 +119,9 @@ describe('POST /register', () => {
         })
     })
 
-after((done) => {
-    db.close().then(done)
-})
+    after((done) => {
+        db.close().then(done)
+    })
 })
 
 

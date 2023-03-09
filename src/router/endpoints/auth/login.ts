@@ -15,7 +15,7 @@ const log = new Log("Route: /login");
 
 loginRouter.post(
     "/",
-    [userRegistred, body("password", "bad password").isLength({ min: 5 }).isString()],
+    [userRegistred, body("password", "bad password").isLength({ min: 5, max: 20 }).isString()],
     async (req: Request, res: Response) => {
         try {
             const errors = validationResult(req);
@@ -23,7 +23,7 @@ loginRouter.post(
             if (!errors.isEmpty()) {
                 return res.status(ResponceStatus.BadRequest).json({
                     message: "Incorect credentials",
-                    predicate: "INCORRECT",
+                    predicate: "INCORECT",
                     errors: errors.array(),
                 });
             }
@@ -45,7 +45,7 @@ loginRouter.post(
                 user.password.toString()
             );
             if (!passwordMatch) {
-                return res.status(ResponceStatus.BadRequest).json({
+                return res.status(ResponceStatus.NotAuthorized).json({
                     message: "Password incorect",
                     predicate: "PASS_INCORECT",
                 });
@@ -66,7 +66,7 @@ loginRouter.post(
             await database.findRefrTokenByUserId(user.id, true)
             /////////////////
             const refreshToken = await database.createNewRefrToken(user.id)
-            
+
             res.cookie('refreshToken',
                 refreshToken,
                 {

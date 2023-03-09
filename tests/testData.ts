@@ -65,3 +65,28 @@ export const checkEmailBodySet = [
         body: {},
     },
 ]
+
+export const loginBodySet = [
+    {
+        case: 'password is too short',
+        body: {
+            email: 'gomihagle@gmail.com',
+            password: '123'
+        },
+    },
+    {
+        case: 'password is too long ',
+        body: {
+            email: 'gomihagle@gmail.com',
+            password: '<script> const getUserCredentials = () => { /some hackers work/}</script>'
+        },
+    },
+    {
+        case: 'password is missing ',
+        body: {
+            email: 'gomihagle@gmail.com',
+        }
+    },
+
+
+]
