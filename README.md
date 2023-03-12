@@ -35,9 +35,9 @@ Password Reset
 
 To reset the password for your user, this service provides the following three endpoints:
 
-    `/resetPassword` is the first endpoint to start the reset password flow. You need to send an email of the user whose password is to be reset in your POST request body. If there is such a user in the service's registered user list, an email with a generated reset password link will be sent to the specified mailbox. That link will be available for 1 hour, after which the token expires.
-    `/resetPasswordLink/:token` is a middle chain route that forwards the generated reset password link in the user's email. When the user follows it from the email, and the token has not yet expired, this route redirects the user to your application's `/resetPassword/:token` route. You need to provide this route; otherwise, it fails. Then you can get the token as a param from the URL and use it for the next route to complete the reset password flow.
-    `/setPassword` is the last endpoint in the reset password flow. You need to pass the new password and reset password token in the body of the request to this endpoint to update
+   - `/resetPassword` is the first endpoint to start the reset password flow. You need to send an email of the user whose password is to be reset in your POST request body. If there is such a user in the service's registered user list, an email with a generated reset password link will be sent to the specified mailbox. That link will be available for 1 hour, after which the token expires.
+   - `/resetPasswordLink/:token` is a middle chain route that forwards the generated reset password link in the user's email. When the user follows it from the email, and the token has not yet expired, this route redirects the user to your application's `/resetPassword/:token` route. You need to provide this route; otherwise, it fails. Then you can get the token as a param from the URL and use it for the next route to complete the reset password flow.
+   - `/setPassword` is the last endpoint in the reset password flow. You need to pass the new password and reset password token in the body of the request to this endpoint to update
 
 Public API endpoints:
 
