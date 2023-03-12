@@ -41,31 +41,36 @@ To reset the password for your user, this service provides the following three e
    - `/setPassword` is the last endpoint in the reset password flow. You need to pass the new password and reset password token in the body of the request to this endpoint to update
 
 Public API endpoints
-Route: /register
 
-This route handles the user registration process. It expects the email and password of a new user to be sent in the request body and responds with the user ID of the newly created user.
-Usage
+- Route: /register
 
-To use this route, make a POST request to the endpoint /register with the following parameters in the request body:
+    This route handles the user registration process. It expects the email and password of a new user to be sent in the request body and responds with the user ID of the newly created user.
+    Usage
 
-    email: The email address of the new user.
-    password: The password of the new user.
+    To use this route, make a POST request to the endpoint `/register` with the following parameters in the request body:
 
-Responses
+        email: The email address of the new user.
+        password: The password of the new user.
 
-If the user with the provided email is already registered, the route will respond with an HTTP 400 status code and an error message "User already registered". The response will also include a predicate key with a value of 'EXIST'.
+    - Responses
 
-If the request body is not valid, the route will respond with an HTTP 400 status code and an error message. The response will also include a predicate key with a value of 'INCORRECT' and an errors key with an array of errors.
+    If the user with the provided email is already registered, the route will respond with an HTTP `400` status code and an error message `"User already registered"`. The response will also include a predicate key with a value of `'EXIST'`.
 
-If the registration is successful, the route will respond with an HTTP 200 status code and a JSON object containing the user ID.
+    If the request body is not valid, the route will respond with an HTTP `400` status code and an error message. The response will also include a predicate key with a value of `'INCORRECT'` and an errors key with an array of errors.
 
-If there is a server error, the route will respond with an HTTP 500 status code and an error message "Server error {error message}".
-Validation
+    If the registration is successful, the route will respond with an HTTP `200` status code and a JSON object containing the user ID.
 
-This route uses Express-validator to validate the request body. It checks that the password is between 5 and 20 characters in length and is a string.
-Security
+    If there is a server error, the route will respond with an HTTP `500` status code and an error message `"Server error {error message}"`.
 
-This route uses bcrypt to securely hash the password before storing it in the database.
+   - Validation
+
+    This route uses Express-validator to validate the request body. It checks that the password is between 5 and 20 characters in length and is a string.
+
+   - Security
+
+    This route uses bcrypt to securely hash the password before storing it in the database.
+
+    
     - Route: /login
         This route handles the user authentication process for logging in. It expects the email and password of a registered user to be sent in the request body and responds with a JSON Web Token (JWT) pair that can be used for further authentication.
 
