@@ -21,7 +21,7 @@ const registerRouter = (0, express_1.Router)();
 const log = new log_1.default("Route: /register");
 registerRouter.post("/", [
     userRegistred_1.default,
-    (0, express_validator_1.body)("password", "bad password").isString().isLength({ min: 5 }),
+    (0, express_validator_1.body)("password", "bad password").isString().isLength({ min: 5, max: 20 }),
 ], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         ///// Validating request params
@@ -29,7 +29,7 @@ registerRouter.post("/", [
         if (!errors.isEmpty()) {
             return res.status(responce_status_1.ResponceStatus.BadRequest).json({
                 message: "Incorect credentials",
-                predicate: "INCORECT",
+                predicate: "INCORRECT",
                 errors: errors.array(),
             });
         }

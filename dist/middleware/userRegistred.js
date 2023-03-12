@@ -43,7 +43,7 @@ function default_1(req, res, next) {
             else {
                 return res.status(responce_status_1.ResponceStatus.BadRequest).json({
                     message: "Email incorect",
-                    predicate: "INCORECT",
+                    predicate: "INCORRECT",
                     errors: []
                 });
             }
@@ -51,7 +51,7 @@ function default_1(req, res, next) {
         else {
             return res.status(responce_status_1.ResponceStatus.BadRequest).json({
                 message: "Email required",
-                predicate: "INCORECT",
+                predicate: "INCORRECT",
                 errors: []
             });
         }

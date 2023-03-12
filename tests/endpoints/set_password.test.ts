@@ -5,63 +5,90 @@ import createApp from '../../src/app'
 import Database from "../../src/storage/database";
 import { Express } from "express";
 import { describe } from "mocha";
-import { loginBodySet } from "../testData";
 import config from 'config'
+import { getSetPasswordBodyData } from "../testData";
+
 
 
 let expect = chai.expect
 let db: Database
 let app: Express
+let RPToken: String
 
 chai.use(chaiHttp)
 
-describe('POST /login', () => {
+describe('POST /setPassword', () => {
     before(async () => {
         db = await createDatabase()
+        const token = await db.createNewRPToken(config.get('testUID'), 'https://test.com') //NEEDS USER WITH SUCH ID TO EXIST 
+        RPToken = token?.token!
         app = createApp(db)
     })
 
-    describe('When email and password are correct', () => {
+    describe('When token valid', () => {
         let res: ChaiHttp.Response
         before((done) => {
             chai.request(app)
-                .post('/login')
-                .send({ email: `gomihagle@gmail.com`, password: `${config.get('testUserPassword')}` })
+                .post(`/setPassword`)
+                .send({
+                    password: `${config.get('testUserPassword')}`,
+                    token: RPToken
+                })
                 .end((err, response) => {
                     res = response
                     done()
                 })
         })
 
-        it('should respond with status code 200', (done) => {
+        it('Should respond with status code 200', (done) => {
             expect(res).to.have.status(200)
             done()
         })
+        it('Should respond object with {message} field', (done) => {
+            expect(res).to.be.json
+            expect(res.body).to.have.all.keys(['message'])
+            done()
+        })
+    })
 
+    describe('When token invalid or expired', () => {
+        let res: ChaiHttp.Response
+        before((done) => {
+            chai.request(app)
+                .post(`/setPassword`)
+                .send({
+                    password: `${config.get('testUserPassword')}`,
+                    token: crypto.randomUUID()
+                })
+                .end((err, response) => {
+                    res = response
+                    done()
+                })
+        })
+
+        it('Should respond with status code 400', (done) => {
+            expect(res).to.have.status(400)
+            done()
+        })
         it('should respond with json', (done) => {
             expect(res).to.be.json
             done()
         })
-
-        it('should respond object with {accessToken} field', (done) => {
-            expect(res.body).to.be.an('object')
-            expect(res.body).to.include.all.keys(['accessToken'])
-            expect(res.body.accessToken).not.to.be.undefined
+        it('should respond object with {message, predicate} fields', (done) => {
+            expect(res.body).to.be.an('object').to.has.all.keys(['message', 'predicate'])
+            expect(res.body.predicate).to.match(/TOKEN_EXP/)
             done()
         })
 
-        it('should set coockie {refreshToken}', (done) => {
-            expect(res).to.have.cookie('refreshToken')
-            done()
-        })
     })
-    describe('When password is incorrect or missing', () => {
-        loginBodySet.forEach(test => {
+
+    describe('When token or/and password incorrect', () => {
+        getSetPasswordBodyData(RPToken).forEach(test => {
             describe(`${test.case}`, () => {
                 let res: ChaiHttp.Response
                 before((done) => {
                     chai.request(app)
-                        .post('/login')
+                        .post(`/setPassword`)
                         .send(test.body)
                         .end((err, response) => {
                             res = response
@@ -69,56 +96,29 @@ describe('POST /login', () => {
                         })
                 })
 
-                it('should respond with status code 400', (done) => {
+                it('Should respond with status code 400', (done) => {
                     expect(res).to.have.status(400)
                     done()
                 })
-
                 it('should respond with json', (done) => {
                     expect(res).to.be.json
                     done()
                 })
-
                 it('should respond object with {message, predicate,errors} fields', (done) => {
                     expect(res.body).to.be.an('object').to.has.all.keys(['message', 'predicate', 'errors'])
                     expect(res.body.predicate).to.match(/INCORRECT/)
                     done()
                 })
+
             })
         })
-
     })
 
-    describe('When sent wrong password', () => {
-        let res: ChaiHttp.Response
-        before((done) => {
-            chai.request(app)
-                .post('/login')
-                .send({ email: `gomihagle@gmail.com`, password: 'mihana' })
-                .end((err, response) => {
-                    res = response
-                    done()
-                })
-        })
 
-        it('should respond with staus code 401', (done) => {
-            expect(res).to.have.status(401)
-            done()
-        })
-        it('should respond with json', (done) => {
-            expect(res).to.be.json
-            done()
-        })
 
-        it('should respond object with {message, predicate} fields', (done) => {
-            expect(res.body).to.be.an('object').to.has.all.keys(['message', 'predicate'])
-            expect(res.body.predicate).to.match(/PASS_INCORRECT/)
-            done()
-        })
-
-    })
 
     after((done) => {
         db.close().then(done)
     })
+
 })

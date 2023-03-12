@@ -23,7 +23,7 @@ const config_1 = __importDefault(require("config"));
 const expire_in_ms_1 = __importDefault(require("../../../types/expire_in_ms"));
 const loginRouter = (0, express_1.Router)();
 const log = new log_1.default("Route: /login");
-loginRouter.post("/", [userRegistred_1.default, (0, express_validator_1.body)("password", "bad password").isLength({ min: 5 }).isString()], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+loginRouter.post("/", [userRegistred_1.default, (0, express_validator_1.body)("password", "bad password").isLength({ min: 5, max: 20 }).isString()], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const errors = (0, express_validator_1.validationResult)(req);
         ///// Validating request params
@@ -49,9 +49,9 @@ loginRouter.post("/", [userRegistred_1.default, (0, express_validator_1.body)("p
         //// Matching password
         const passwordMatch = bcrypt_1.default.compareSync(password, user.password.toString());
         if (!passwordMatch) {
-            return res.status(responce_status_1.ResponceStatus.BadRequest).json({
+            return res.status(responce_status_1.ResponceStatus.NotAuthorized).json({
                 message: "Password incorect",
-                predicate: "PASS_INCORECT",
+                predicate: "PASS_INCORRECT",
             });
         }
         ////////////////////////

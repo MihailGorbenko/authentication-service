@@ -13,8 +13,8 @@ addOriginRouter.post(
     '/',
     [
         body('login', 'badLogin').isIn(['Dev', 'Admin']),
-        body('password', 'badPassword').isAlphanumeric().isLength({ min: 5 }),
-        body('origin', 'bad origin').isURL().isString()
+        body('password', 'badPassword').isAlphanumeric().isLength({ min: 5, max: 20 }),
+        body('origin', 'bad origin').isURL({ protocols: ['http', 'https'], require_protocol: true }).isString()
     ],
     async (req: Request, res: Response) => {
 
@@ -34,13 +34,22 @@ addOriginRouter.post(
 
             if (login === 'Dev') {
                 if (password === config.get('devPassword')) {
-                    const addResult = await database.addAllowedOrigin(origin, true)
-                    return res
-                        .status(addResult ? ResponceStatus.Success : ResponceStatus.StorageError)
-                        .json({
-                            message: addResult ? 'Added succesfully' : 'Error saving origin',
-                            predicate: addResult ? 'SUCCESS' : 'ERROR'
-                        })
+                    try {
+                        const addResult = await database.addAllowedOrigin(origin, true)
+                        return res
+                            .status(addResult ? ResponceStatus.Success : ResponceStatus.StorageError)
+                            .json({
+                                message: addResult ? 'Added succesfully' : 'Error saving origin',
+                                predicate: addResult ? 'SUCCESS' : 'STRG_ERROR'
+                            })
+
+                    } catch (e: Error | any) {
+                        log.error(`Error ${e?.message}`);
+                        return res.status(ResponceStatus.StorageError).json({
+                            message: `Server error ${e?.message}`,
+                        });
+                    }
+
                 }
                 else {
                     return res.status(ResponceStatus.NotAuthorized).json({
@@ -51,13 +60,22 @@ addOriginRouter.post(
             }
             else {
                 if (password === config.get('adminPassword')) {
-                    const addResult = await database.addAllowedOrigin(origin, false)
-                    return res
-                        .status(addResult ? ResponceStatus.Success : ResponceStatus.StorageError)
-                        .json({
-                            message: addResult ? 'Added succesfully' : 'Error saving origin',
-                            predicate: addResult ? 'SUCCESS' : 'ERROR'
-                        })
+                    try {
+                        const addResult = await database.addAllowedOrigin(origin, false)
+                        return res
+                            .status(addResult ? ResponceStatus.Success : ResponceStatus.StorageError)
+                            .json({
+                                message: addResult ? 'Added succesfully' : 'Error saving origin',
+                                predicate: addResult ? 'SUCCESS' : 'STRG_ERROR'
+                            })
+
+                    } catch (e: Error | any) {
+                        log.error(`Error ${e?.message}`);
+                        return res.status(ResponceStatus.StorageError).json({
+                            message: `Server error ${e?.message}`,
+                        });
+                    }
+
                 }
                 else {
                     return res.status(ResponceStatus.NotAuthorized).json({

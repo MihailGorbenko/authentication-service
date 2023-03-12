@@ -41,7 +41,7 @@ export default async function (
     else {
       return res.status(ResponceStatus.BadRequest).json({
         message: "Email incorect",
-        predicate: "INCORECT",
+        predicate: "INCORRECT",
         errors:[]
       });
     }
@@ -50,7 +50,7 @@ export default async function (
   else {
     return res.status(ResponceStatus.BadRequest).json({
       message: "Email required",
-      predicate: "INCORECT",
+      predicate: "INCORRECT",
       errors:[]
     });
   }

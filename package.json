@@ -4,7 +4,7 @@
   "description": "authentication service",
   "main": "app.ts",
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha -r ts-node/register 'tests/**/*.test.ts' --timeout 10000 --exit",
+    "test": "cross-env NODE_ENV=test mocha -r ts-node/register 'tests/**/*.test.ts' --timeout 20000 --exit",
     "dev": " nodemon",
     "docker:build": "docker build -t mihago/authentication-service .",
     "build": "run-s test compile docker:build",

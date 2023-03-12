@@ -6,6 +6,7 @@ import Database from "../../src/storage/database";
 import { Express } from "express";
 import { describe } from "mocha";
 import { checkEmailBodySet } from "../testData";
+import config from 'config'
 
 
 let expect = chai.expect
@@ -26,7 +27,7 @@ describe('POST /checkEmail', () => {
             before((done) => {
                 chai.request(app)
                     .post('/checkEmail')
-                    .send({ email: 'gomihagle@gmail.com' })
+                    .send({ email: `${config.get('testUserEmail')}` })
                     .end((err, response) => {
                         res = response
                         done()
@@ -114,8 +115,8 @@ describe('POST /checkEmail', () => {
                     expect(res).to.have.header("content-type", /^application\/json/)
                     done()
                 })
-                it('Should respond object with {predicate} field match [INCORECT]', (done) => {
-                    expect(res.body.predicate).to.match(/INCORECT/)
+                it('Should respond object with {predicate} field match [INCORRECT]', (done) => {
+                    expect(res.body.predicate).to.match(/INCORRECT/)
                     done()
                 })
             })

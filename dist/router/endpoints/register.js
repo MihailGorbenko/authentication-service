@@ -32,7 +32,7 @@ registerRouter.post("/", [
         if (!errors.isEmpty()) {
             return res.status(responce_status_1.ResponceStatus.BadRequest).json({
                 message: "Incorect credentials",
-                predicate: "INCORECT",
+                predicate: "INCORRECT",
                 errors: errors.array(),
             });
         }

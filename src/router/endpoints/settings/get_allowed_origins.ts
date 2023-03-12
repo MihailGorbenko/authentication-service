@@ -10,7 +10,8 @@ const log = new Log('Route: /getAllowedOrigins')
 allowedOriginsRouter.post(
     '/',
     [
-        body('password', 'badPassword').isAlphanumeric().isLength({ min: 5 }),
+        body('password', 'badPassword').isAlphanumeric().isLength({ min: 5, max: 20 }),
+        body('login', 'badLogin').isIn(['Dev', 'Admin']),
     ],
     async (req: Request, res: Response) => {
         try {
@@ -25,7 +26,7 @@ allowedOriginsRouter.post(
             }
             /////////////////
 
-            const { login, password, origin } = req.body
+            const { login, password } = req.body
             const database = req.database
 
             if (login === 'Dev') {

@@ -26,7 +26,7 @@ resetPasswordRouter.post('/', [userRegistred_1.default], (req, res) => __awaiter
         ///// Check user
         if (!user) {
             log.info(`User not registred`);
-            return res.status(responce_status_1.ResponceStatus.BadRequest).json({
+            return res.status(responce_status_1.ResponceStatus.NotAuthorized).json({
                 message: "User not registred",
                 predicate: "NOT_EXIST",
             });
