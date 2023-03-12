@@ -20,12 +20,12 @@ Are you looking for a reliable and secure authentication service for your web ap
 
     Your service can send register credentials in the body of the request to the `/register` endpoint. You need to provide `{email, password}`fields, and if a user with such an email does not exist in the service, they will be successfully added to the service's registered user list. Otherwise, you will get an error response. For the email and password fields, the following restrictions apply:
 
-        Password field must be a string, with a minimum length of 5 symbols and a maximum length of 20.
+        Password field must be a string, with a min length of 5 symbols and a max length of 20.
         Email field should be a valid email string.
 
     - Login
 
-    After a successful login, you will get an access token in the request body. It expires after `10 minutes`, and a refresh token in a cookie (configured as `httpOnly`, so you can't modify it on the client side) that expires after 1 month.
+    After a successful login, you will get an access token in the request body. It expires after `10 minutes`, and a refresh token in a cookie (configured as `httpOnly`, so you can't modify it on the client side) that expires after `1 month`.
 
     - Token Refresh
 
