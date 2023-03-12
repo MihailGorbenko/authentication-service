@@ -70,34 +70,35 @@ Public API endpoints
 
     This route uses bcrypt to securely hash the password before storing it in the database.
 
-    
-    - Route: /login
-        This route handles the user authentication process for logging in. It expects the email and password of a registered user to be sent in the request body and responds with a JSON Web Token (JWT) pair that can be used for further authentication.
 
+- Route: /login
 
-        Usage
+    This route handles the user authentication process for logging in. It expects the email and password of a registered user to be sent in the request body and responds with a JSON Web Token (JWT) pair that can be used for further authentication.
 
-        To use this route, make a POST request to the endpoint /login with the following parameters in the request body:
+    - Usage
 
-            email: The email address of the registered user
-            password: The password of the registered user
+    To use this route, make a POST request to the endpoint `/login` with the following parameters in the request body:
 
-        If the user is registered and the password is correct, the route will respond with an HTTP 200 status code and a JSON object containing the access token for further authentication.
+        email: The email address of the registered user.
+        password: The password of the registered user.
 
-        If the user is not registered, the route will respond with an HTTP 400 status code and an error message "User not registred", and 'predicate' key with 'NOT_EXIST' value.
+    If the user is registered and the password is correct, the route will respond with an HTTP `200` status code and a JSON object containing the access token for further authentication.
 
-        If the password is incorrect, the route will respond with an HTTP 401 status code and an error message "Password incorect", and 'predicate' key with 'PASS_INCORRECT' value.
+    If the user is not registered, the route will respond with an HTTP `400` status code and an error message `"User not registred"`, and a predicate key with `'NOT_EXIST'` value.
 
-        If the credentials not valid, the route will respond with an HTTP 400 status code and an error message,'predicate' key with 'INCORRECT' value and 'errors' key with array of errors.
+    If the password is incorrect, the route will respond with an HTTP `401` status code and an error message `"Password incorrect"`, and a predicate key with `'PASS_INCORRECT'` value.
 
-        If there is a server error, the route will respond with an HTTP 500 status code and an error message "Server error {error message}".
+    If the credentials are not valid, the route will respond with an HTTP `400` status code and an error message, a predicate key with `'INCORRECT'` value, and an errors key with an array of errors.
 
-        Validation
+    If there is a server error, the route will respond with an HTTP `500` status code and an error message `"Server error {error message}"`.
 
-        This route uses Express-validator to validate the request body. It checks that the password is between 5 and 20 characters in length and is a string.
-        Security
+    - Validation
 
-        This route uses bcrypt to securely hash the password before comparing it with the stored hash in the database. It also generates a JWT pair that includes an access token and a refresh token. The refresh token is stored in a HttpOnly and Secure cookie with a max age of 1 month, and the access token expires in 10 minutes.
+    This route uses Express-validator to validate the request body. It checks that the password is between 5 and 20 characters in length and is a string.
+
+    - Security
+
+    This route uses bcrypt to securely hash the password before comparing it with the stored hash in the database. It also generates a JWT pair that includes an access token and a refresh token. The refresh token is stored in a HttpOnly and Secure cookie with a max age of 1 month, and the access token expires in 10 minutes.
 
     - Route: /refreshToken
         This route handles the refresh token authentication process for refreshing an access token. It expects a valid refresh token to be sent in the request cookie and responds with a new JSON Web Token (JWT) pair that can be used for further authentication.
