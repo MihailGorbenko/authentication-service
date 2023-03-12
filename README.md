@@ -2,9 +2,7 @@
 
 Are you looking for a reliable and secure authentication service for your web application? Look no further! Our authentication service is based on the `Express/Node.js` platform and provides a variety of features to help you protect your endpoints and ensure your users' data is safe.
 
-- Features
-
-This authentication service uses the following technologies:
+- This authentication service uses the following technologies:
 
    - Mongoose wrapper for persisting data
    - Mocha & Chai/Chai-http for testing
@@ -12,38 +10,38 @@ This authentication service uses the following technologies:
    - Nginx as a reverse-proxy for signing HTTPS traffic
    - Certbot for getting certificates
 
-In addition, our service provides the following features:
+- This service provides the following features:
 
-- Domain Whitelisting
+    - Domain Whitelisting
 
-To ensure only authorized domains can access your web application, our service provides a domain whitelisting feature. You can add your domain to the `"Allow List"` using the settings page of this service, which can be found on the root path of the service domain. You need to get the `admin` password to permanently add your domain, or the `dev` password `[password: devStrongPassword]` to allow your domain for only one day. After successfully adding your origin, you will get a generated `JWT secret`. You need to use it for validating access token on your application backend to protect your endpoints.
+    To ensure only authorized domains can access your web application, our service provides a domain whitelisting feature. You can add your domain to the `"Allow List"` using the settings page of this service, which can be found on the root path of the service domain. You need to get the `admin` password to permanently add your domain, or the `dev` password `[password: devStrongPassword]` to allow your domain for only one day. After successfully adding your origin, you will get a generated `JWT secret`. You need to use it for validating access token on your application backend to protect your endpoints.
 
-- Registration
+    - Registration
 
-Your service can send register credentials in the body of the request to the `/register` endpoint. You need to provide `{email, password}`fields, and if a user with such an email does not exist in the service, they will be successfully added to the service's registered user list. Otherwise, you will get an error response. For the email and password fields, the following restrictions apply:
+    Your service can send register credentials in the body of the request to the `/register` endpoint. You need to provide `{email, password}`fields, and if a user with such an email does not exist in the service, they will be successfully added to the service's registered user list. Otherwise, you will get an error response. For the email and password fields, the following restrictions apply:
 
-    Password field must be a string, with a minimum length of 5 symbols and a maximum length of 20.
-    Email field should be a valid email string.
+        Password field must be a string, with a minimum length of 5 symbols and a maximum length of 20.
+        Email field should be a valid email string.
 
-- Login
+    - Login
 
-After a successful login, you will get an access token in the request body. It expires after `10 minutes`, and a refresh token in a cookie (configured as `httpOnly`, so you can't modify it on the client side) that expires after 1 month.
+    After a successful login, you will get an access token in the request body. It expires after `10 minutes`, and a refresh token in a cookie (configured as `httpOnly`, so you can't modify it on the client side) that expires after 1 month.
 
-- Token Refresh
+    - Token Refresh
 
-When your access token expires, you can post a request to the `/refreshToken` endpoint to refresh your `access/refresh` token pair. You don't need to specify any body data; the refresh token will be obtained from the cookie set by the login flow.
+    When your access token expires, you can post a request to the `/refreshToken` endpoint to refresh your `access/refresh` token pair. You don't need to specify any body data; the refresh token will be obtained from the cookie set by the login flow.
 
-- Email Validation
+    - Email Validation
 
-There is also a `/checkEmail` endpoint to check if the specified email already exists in the service's user list. You need to provide the `{email}` field with a valid email string in your request body.
+    There is also a `/checkEmail` endpoint to check if the specified email already exists in the service's user list. You need to provide the `{email}` field with a valid email string in your request body.
 
-- Password Reset
+    - Password Reset
 
-To reset the password for your user, this service provides the following three endpoints:
+    To reset the password for your user, this service provides the following three endpoints:
 
-   - `/resetPassword` is the first endpoint to start the reset password flow. You need to send an email of the user whose password is to be reset in your POST request body. If there is such a user in the service's registered user list, an email with a generated reset password link will be sent to the specified mailbox. That link will be available for `1 hour`, after which the token expires.
-   - `/resetPasswordLink/:token` is a middle chain route that forwards the generated reset password link in the user's email. When the user follows it from the email, and the token has not yet expired, this route redirects the user to your application's `/resetPassword/:token` route. You need to provide this route; otherwise, it fails. Then you can get the token as a param from the URL and use it for the next route to complete the reset password flow.
-   - `/setPassword` is the last endpoint in the reset password flow. You need to pass the new password and reset password token in the body of the request to this endpoint to update
+    - `/resetPassword` is the first endpoint to start the reset password flow. You need to send an email of the user whose password is to be reset in your POST request body. If there is such a user in the service's registered user list, an email with a generated reset password link will be sent to the specified mailbox. That link will be available for `1 hour`, after which the token expires.
+    - `/resetPasswordLink/:token` is a middle chain route that forwards the generated reset password link in the user's email. When the user follows it from the email, and the token has not yet expired, this route redirects the user to your application's `/resetPassword/:token` route. You need to provide this route; otherwise, it fails. Then you can get the token as a param from the URL and use it for the next route to complete the reset password flow.
+    - `/setPassword` is the last endpoint in the reset password flow. You need to pass the new password and reset password token in the body of the request to this endpoint to update
 
 Public API endpoints
 
