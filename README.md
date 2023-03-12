@@ -1,6 +1,10 @@
 Authentication Service
 
-This is an authentication service based on the Express/Node.js platform. It uses the following:
+Are you in search of a reliable and secure authentication service for your web application? Look no further! Our authentication service is built on the Express/Node.js platform and provides a wide range of features to help you safeguard your endpoints and guarantee the safety of your users' data.
+
+Features
+
+Our authentication service uses several technologies, including:
 
     Mongoose wrapper for persisting data
     Mocha & Chai/Chai-http for testing
@@ -8,32 +12,38 @@ This is an authentication service based on the Express/Node.js platform. It uses
     Nginx as a reverse-proxy for signing HTTPS traffic
     Certbot for getting certificates
 
-It is available at https://auth.omgapp.pp.ua.
-Authentication Flow
+Additionally, our service offers the following features:
 
-To authenticate, you need to use the following flow:
+Domain Whitelisting
 
-    Your domain needs to be allowed. You can add your domain to the "Allow List" using the settings page of this service, which can be found on the root path of the service domain. You need to get the admin password to permanently add your domain, or the dev password [password: devStrongPassword] to allow your domain for only one day. After successfully adding your origin, you will get a generated JWT secret. You need to use it for validating access token on your application backend to protect your endpoints.
+To ensure that only authorized domains can access your web application, our service provides a domain whitelisting feature. You can add your domain to the "Allow List" by accessing the settings page of this service, which can be found on the root path of the service domain. To permanently add your domain, you need to get the admin password, or you can use the dev password [password: devStrongPassword] to allow your domain access for only one day. Once you have successfully added your origin, you will receive a generated JWT secret that you need to use for validating access tokens on your application backend to protect your endpoints.
 
-    Your service can send register credentials in the body of the request to the /register endpoint. You need to provide {email, password} fields, and if a user with such an email does not exist in the service, they will be successfully added to the service's registered user list. Otherwise, you will get an error response. For the email and password fields, the following restrictions apply:
-        Password field must be a string, with a minimum length of 5 symbols and a maximum length of 20.
-        Email field should be a valid email string.
+Registration
 
-    After a successful login, you will get an access token in the request body. It expires after 10 minutes, and a refresh token in a cookie (configured as httpOnly, so you can't modify it on the client side) that expires after 1 month.
+Your service can send registration credentials in the body of the request to the /register endpoint. You need to provide the {email, password} fields, and if a user with such an email does not exist in the service, they will be successfully added to the service's registered user list. Otherwise, you will receive an error response. For the email and password fields, the following restrictions apply:
 
-    When your access token expires, you can post a request to the /refreshToken endpoint to refresh your access/refresh token pair. You don't need to specify any body data; the refresh token will be obtained from the cookie set by the login flow.
+    The password field must be a string, with a minimum length of 5 symbols and a maximum length of 20.
+    The email field should be a valid email string.
 
-    There is also a /checkEmail endpoint to check if the specified email already exists in the service's user list. You need to provide the {email} field with a valid email string in your request body.
+Login
 
-Reset Password Flow
+After a successful login, you will receive an access token in the request body. The access token expires after 10 minutes, and you will also receive a refresh token in a cookie (configured as httpOnly, so you can't modify it on the client-side) that expires after 1 month.
+
+Token Refresh
+
+When your access token expires, you can post a request to the /refreshToken endpoint to refresh your access/refresh token pair. You don't need to specify any body data; the refresh token will be obtained from the cookie set by the login flow.
+
+Email Validation
+
+There is also a /checkEmail endpoint to check if the specified email already exists in the service's user list. You need to provide the {email} field with a valid email string in your request body.
+
+Password Reset
 
 To reset the password for your user, this service provides the following three endpoints:
 
     /resetPassword is the first endpoint to start the reset password flow. You need to send an email of the user whose password is to be reset in your POST request body. If there is such a user in the service's registered user list, an email with a generated reset password link will be sent to the specified mailbox. That link will be available for 1 hour, after which the token expires.
-
     /resetPasswordLink/:token is a middle chain route that forwards the generated reset password link in the user's email. When the user follows it from the email, and the token has not yet expired, this route redirects the user to your application's /resetPassword/:token route. You need to provide this route; otherwise, it fails. Then you can get the token as a param from the URL and use it for the next route to complete the reset password flow.
-
-    /setPassword is the last endpoint in the reset password flow. You need to pass the new password and reset password token from the previous endpoint to your request body, and if the password is correct (length min: 5, max: 20), the password will be reset for the user obtained from this token.
+    /setPassword is the last endpoint in the reset password flow. You need to pass the new password and reset
 
 Public API endpoints:
 
