@@ -35,6 +35,7 @@ describe('POST /addOrigin', () => {
                     before((done) => {
                         chai.request(app)
                             .post('/addOrigin')
+                            .set('origin', 'http://localhost')
                             .send(body)
                             .end((err, response) => {
                                 res = response
@@ -51,8 +52,9 @@ describe('POST /addOrigin', () => {
                         expect(res).to.be.json
                         done()
                     })
-                    it('should respond object with {message, predicate} fields', (done) => {
-                        expect(res.body).to.be.an('object').to.has.all.keys(['message', 'predicate'])
+                    it('should respond object with {message, predicate,secret} fields', (done) => {
+                        expect(res.body).to.be.an('object').to.has.all.keys(['message', 'predicate','secret'])
+                        expect(res.body.secret).not.to.be.undefined
                         expect(res.body.predicate).to.match(/SUCCESS/)
                         done()
                     })
@@ -74,11 +76,13 @@ describe('POST /addOrigin', () => {
 
                         chai.request(app)
                             .post('/addOrigin')
+                            .set('origin', 'http://localhost')
                             .send(body)
                             .end((err, resp) => {
 
                                 chai.request(app)
                                     .post('/addOrigin')
+                                    .set('origin', 'http://localhost')
                                     .send(body)
                                     .end((err, response) => {
                                         res = response
@@ -115,6 +119,7 @@ describe('POST /addOrigin', () => {
                 before((done) => {
                     chai.request(app)
                         .post('/addOrigin')
+                        .set('origin', 'http://localhost')
                         .send(test.body)
                         .end((err, response) => {
                             res = response
@@ -149,6 +154,7 @@ describe('POST /addOrigin', () => {
                 before((done) => {
                     chai.request(app)
                         .post('/addOrigin')
+                        .set('origin', 'http://localhost')
                         .send(test.body)
                         .end((err, response) => {
                             res = response

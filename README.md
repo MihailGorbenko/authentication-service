@@ -43,7 +43,7 @@ Are you looking for a reliable and secure authentication service for your web ap
     - `/resetPasswordLink/:token` is a middle chain route that forwards the generated reset password link in the user's email. When the user follows it from the email, and the token has not yet expired, this route redirects the user to your application's `/resetPassword/:token` route. You need to provide this route; otherwise, it fails. Then you can get the token as a param from the URL and use it for the next route to complete the reset password flow.
     - `/setPassword` is the last endpoint in the reset password flow. You need to pass the new password and reset password token in the body of the request to this endpoint to update
 
-Public API endpoints
+# Public API endpoints
 
 - Route: **/register**
 

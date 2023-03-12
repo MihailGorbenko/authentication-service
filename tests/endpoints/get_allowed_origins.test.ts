@@ -28,6 +28,7 @@ describe('POST /getAllowedOrigins', () => {
                 before((done) => {
                     chai.request(app)
                         .post('/getAllowedOrigins')
+                        .set('origin', 'http://localhost')
                         .send(test.body)
                         .end((err, response) => {
                             res = response
@@ -61,6 +62,7 @@ describe('POST /getAllowedOrigins', () => {
                 before((done) => {
                     chai.request(app)
                         .post('/getAllowedOrigins')
+                        .set('origin', 'http://localhost')
                         .send(test.body)
                         .end((err, response) => {
                             res = response
@@ -92,6 +94,7 @@ describe('POST /getAllowedOrigins', () => {
                     before((done) => {
                         chai.request(app)
                             .post('/getAllowedOrigins')
+                            .set('origin', 'http://localhost')
                             .send(test.body)
                             .end((err, response) => {
                                 res = response

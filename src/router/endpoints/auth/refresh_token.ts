@@ -39,25 +39,27 @@ refreshTokenRouter.post(
                 })
             }
             const { userId } = tokenRecord
+            const jwtSecret = await req.database.getJwtSecretByOrigin(`${req.headers.origin}`)
 
             //// Genereting JWT pair
             const accessToken = JWT.sign(
                 {
                     id: userId
                 },
-                config.get("jwtSecret"),
+                jwtSecret as JWT.Secret,
                 {
                     expiresIn: "10m",
                 }
             );
             
-            const newRefreshToken = await database.createNewRefrToken(userId)
+            
+            const newRefreshToken = await database.createNewRefrToken(userId,jwtSecret)
 
             res.cookie('refreshToken',
                 newRefreshToken,
                 {
                     httpOnly: true,
-                    secure: true,
+                    secure: false,
                     maxAge: expire_in_ms['1month'],
                     sameSite: 'none',
                     path: '/refreshToken'

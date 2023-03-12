@@ -26,6 +26,7 @@ describe('POST /register', () => {
             before((done) => {
                 chai.request(app)
                     .post('/register')
+                    .set('origin', 'http://localhost')
                     .send({ email: `${crypto.randomUUID()}@gmail.com`, password: 'sdsdsds' })
                     .end((err, response) => {
                         res = response
@@ -55,6 +56,7 @@ describe('POST /register', () => {
             before((done) => {
                 chai.request(app)
                     .post('/register')
+                    .set('origin', 'http://localhost')
                     .send({ email: `gomihagle@gmail.com`, password: 'sdsdsds' })
                     .end((err, response) => {
                         res = response
@@ -89,6 +91,7 @@ describe('POST /register', () => {
                 before((done) => {
                     chai.request(app)
                         .post('/register')
+                        .set('origin', 'http://localhost')
                         .send(test.body)
                         .end((err, response) => {
                             res = response

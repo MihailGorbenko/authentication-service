@@ -30,6 +30,7 @@ describe('POST /setPassword', () => {
         before((done) => {
             chai.request(app)
                 .post(`/setPassword`)
+                .set('origin', 'http://localhost')
                 .send({
                     password: `${config.get('testUserPassword')}`,
                     token: RPToken
@@ -56,6 +57,7 @@ describe('POST /setPassword', () => {
         before((done) => {
             chai.request(app)
                 .post(`/setPassword`)
+                .set('origin', 'http://localhost')
                 .send({
                     password: `${config.get('testUserPassword')}`,
                     token: crypto.randomUUID()
@@ -89,6 +91,7 @@ describe('POST /setPassword', () => {
                 before((done) => {
                     chai.request(app)
                         .post(`/setPassword`)
+                        .set('origin', 'http://localhost')
                         .send(test.body)
                         .end((err, response) => {
                             res = response

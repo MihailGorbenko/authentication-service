@@ -9,7 +9,8 @@ declare global {
   namespace Express {
     export interface Request {
       user: ServiceUserRecord,
-      database: DB
+      database: DB,
+      jwtSecret: String 
 
     }
   }

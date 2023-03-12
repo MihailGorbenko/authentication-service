@@ -26,7 +26,7 @@ describe('POST /resetPassword', () => {
             chai.request(app)
                 .post('/resetPassword')
                 .send({ email: `${config.get('testUserEmail')}` })
-                .set('Origin','https://test.com')
+                .set('origin', 'http://localhost')
                 .end((err, response) => {
                     res = response
                     done()
@@ -52,6 +52,7 @@ describe('POST /resetPassword', () => {
         before((done) => {
             chai.request(app)
                 .post('/resetPassword')
+                .set('origin', 'http://localhost')
                 .send({ email: `${crypto.randomUUID()}@gmail.com` })
                 .end((err, response) => {
                     res = response

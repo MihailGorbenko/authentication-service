@@ -27,6 +27,7 @@ describe('POST /refreshToken', () => {
         before((done) => {
             chai.request(app)
                 .post('/login')
+                .set('origin', 'http://localhost')
                 .send({
                     email: `${config.get('testUserEmail')}`,
                     password: `${config.get('testUserPassword')}`
@@ -39,6 +40,7 @@ describe('POST /refreshToken', () => {
                     chai.request(app)
                         .post('/refreshToken')
                         .set('Cookie', `${loginCookie}`)
+                        .set('origin', 'http://localhost')
                         .end((err, res) => {
                             refreshResponce = res
                             done()
@@ -76,6 +78,7 @@ describe('POST /refreshToken', () => {
         before((done) => {
             chai.request(app)
             .post('/refreshToken')
+            .set('origin', 'http://localhost')
             .set('Cookie', `refreshToken=${crypto.randomUUID()}`)
             .end((err, response) => {
                 res = response
@@ -104,6 +107,7 @@ describe('POST /refreshToken', () => {
         before((done) => {
             chai.request(app)
             .post('/refreshToken')
+            .set('origin', 'http://localhost')
             .end((err, response) => {
                 res = response
                 done()

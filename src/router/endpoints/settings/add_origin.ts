@@ -35,12 +35,13 @@ addOriginRouter.post(
             if (login === 'Dev') {
                 if (password === config.get('devPassword')) {
                     try {
-                        const addResult = await database.addAllowedOrigin(origin, true)
+                        const secret = await database.addAllowedOrigin(origin, true)
                         return res
-                            .status(addResult ? ResponceStatus.Success : ResponceStatus.StorageError)
+                            .status(secret ? ResponceStatus.Success : ResponceStatus.StorageError)
                             .json({
-                                message: addResult ? 'Added succesfully' : 'Error saving origin',
-                                predicate: addResult ? 'SUCCESS' : 'STRG_ERROR'
+                                message: secret ? 'Added succesfully' : 'Error saving origin',
+                                predicate: secret ? 'SUCCESS' : 'STRG_ERROR',
+                                secret: secret ? secret : 'undefined'
                             })
 
                     } catch (e: Error | any) {
@@ -61,12 +62,13 @@ addOriginRouter.post(
             else {
                 if (password === config.get('adminPassword')) {
                     try {
-                        const addResult = await database.addAllowedOrigin(origin, false)
+                        const secret = await database.addAllowedOrigin(origin, false)
                         return res
-                            .status(addResult ? ResponceStatus.Success : ResponceStatus.StorageError)
+                            .status(secret ? ResponceStatus.Success : ResponceStatus.StorageError)
                             .json({
-                                message: addResult ? 'Added succesfully' : 'Error saving origin',
-                                predicate: addResult ? 'SUCCESS' : 'STRG_ERROR'
+                                message: secret ? 'Added succesfully' : 'Error saving origin',
+                                predicate: secret ? 'SUCCESS' : 'STRG_ERROR',
+                                secret: secret ? secret : 'undefined'
                             })
 
                     } catch (e: Error | any) {

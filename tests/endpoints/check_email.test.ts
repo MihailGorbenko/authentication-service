@@ -27,6 +27,7 @@ describe('POST /checkEmail', () => {
             before((done) => {
                 chai.request(app)
                     .post('/checkEmail')
+                    .set('origin', 'http://localhost')
                     .send({ email: `${config.get('testUserEmail')}` })
                     .end((err, response) => {
                         res = response
@@ -59,6 +60,7 @@ describe('POST /checkEmail', () => {
             before((done) => {
                 chai.request(app)
                     .post('/checkEmail')
+                    .set('origin', 'http://localhost')
                     .send({ email: `${crypto.randomUUID()}@gmail.com` })
                     .end((err, response) => {
                         res = response
@@ -94,6 +96,7 @@ describe('POST /checkEmail', () => {
                 before((done) => {
                     chai.request(app)
                         .post('/checkEmail')
+                        .set('origin', 'http://localhost')
                         .send(test.body)
                         .end((err, response) => {
                             res = response

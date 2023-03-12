@@ -28,6 +28,7 @@ describe('POST /resetPasswordLink/:token', () => {
         before((done) => {
             chai.request(app)
                 .post(`/resetPasswordLink/${RPToken}`)
+                .set('origin', 'http://localhost')
                 .redirects(0)
                 .end((err, response) => {
                     res = response
@@ -52,6 +53,7 @@ describe('POST /resetPasswordLink/:token', () => {
         before((done) => {
             chai.request(app)
                 .post(`/resetPasswordLink/${crypto.randomUUID()}`)
+                .set('origin', 'http://localhost')
                 .redirects(0)
                 .end((err, response) => {
                     res = response

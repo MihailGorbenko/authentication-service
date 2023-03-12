@@ -282,6 +282,14 @@
                                 <div></div>
                                 <div></div>
                             </div>
+                            <div id="secret_block" class="d-none">
+                                <h4>JWT secret:</h4>
+                                <div class="input-group mb-3">
+                                    <button class="btn btn-primary form-button"  id="copy_button" type="button">Copy</button>
+                                    <input type="text" class="form-control " id="secret_input" disabled>
+                                </div>
+                            </div>
+                            
                             <div class="row list-block">
                                 <ul id="origin_list" class="d-none">
                                    
@@ -301,6 +309,7 @@
         const flag = document.querySelector('#flag')
         const originList = document.querySelector('#origin_list')
         const addButton = document.querySelector('#submit_button')
+        const copyButton = document.querySelector('#copy_button')
         const listButton = document.querySelector('#list_button')
         const useCurrent = document.querySelector('#ip_button')
         const loginInput = document.querySelector('#login_input')
@@ -308,8 +317,23 @@
         const originInput = document.querySelector('#origin_input')
         const loginMenu = document.querySelector('.dropdown-menu')
 
-        const serverOrigin =  window.origin
+        const serverOrigin = window.origin
         const urlRegex = /^https?:\/\/(.*)/
+
+        function showSecret(secret){
+            document.querySelector('#secret_block').classList.remove('d-none')
+            document.querySelector('#secret_input').value = secret
+        }
+
+        copyButton.addEventListener('click',() => {
+           const secretInput = document.querySelector('#secret_input')
+           secretInput.select()
+           secretInput.setSelectionRange(0, 99999);
+           navigator.clipboard.writeText(secretInput.value);
+           copyButton.textContent = 'Copied'
+
+        })
+
 
         function toggleLoader() {
             document.querySelector('.lds-spinner').classList.toggle('d-none')
@@ -448,6 +472,7 @@
                     switch (resStatus) {
                         case 200: {
                             showAlert('Added successfully', 'success')
+                            showSecret(res.secret)
                             break
                         }
                         case 401: {

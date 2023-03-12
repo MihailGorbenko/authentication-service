@@ -10,6 +10,7 @@ import PersistOrigin from "../models/PersistOrigin";
 import { Origin } from "../types/origin";
 import Log from "../utils/log";
 import mongoose from "mongoose";
+import crypto from 'crypto'
 
 export abstract class DB {
     abstract addServiceUser(user: IServiceUser): Promise<String>
@@ -17,55 +18,67 @@ export abstract class DB {
     abstract findUserById(userId: Object): Promise<ServiceUserRecord>
     abstract findRefrTokenByUserId(userId: String, remove: boolean): Promise<RefreshTokenRecord>
     abstract findRefrToken(token: String, remove: boolean): Promise<RefreshTokenRecord>
-    abstract createNewRefrToken(userId: string): Promise<String>
+    abstract createNewRefrToken(userId: String, secret: String): Promise<String>
     abstract findRPTokenByUserId(userId: String, remove: boolean): Promise<RPTokenRecord>
     abstract findRPToken(token: String, remove: boolean): Promise<RPTokenRecord>
     abstract createNewRPToken(userId: string, clientUrl: String): Promise<RPTokenRecord>
-    abstract addAllowedOrigin(origin: String, dev: boolean): Promise<boolean>
+    abstract addAllowedOrigin(origin: String, dev: boolean): Promise<String>
     abstract getAllowedOrigins(): Promise<Origin[]>
-    abstract close():Promise<void>
-    abstract connect():Promise<void>
+    abstract getJwtSecretByOrigin(origin:String):Promise<String>
+    abstract close(): Promise<void>
+    abstract connect(): Promise<void>
 }
 
 
 export default class Database extends DB {
+
+    async getJwtSecretByOrigin(origin: String): Promise<String> {
+        let record = await PersistOrigin.findOne({origin})
+        if(!record){
+            record = await DevOrigin.findOne({origin})
+        }
+
+        if(record) return record.jwtSecret
+        else throw new Error(`Can't find jwtSecret for ${origin}`)
+    }
     connection: mongoose.Connection | null;
 
     constructor() {
         super()
         this.connection = null
     }
-    async connect():Promise<void>{
+    async connect(): Promise<void> {
         const log = new Log("Database")
 
         mongoose.set('strictQuery', false)
         mongoose.connection.on('error', (err) => log.error(err))
-        mongoose.connection.once('open',() => log.info('Mongo DB connection successfull'))
+        mongoose.connection.once('open', () => log.info('Mongo DB connection successfull'))
         this.connection = mongoose.connection
         await mongoose.connect(config.get('mongoUri'))
-           
+
     }
 
 
-    async close():Promise<void> {
-        if (this.connection){
+    async close(): Promise<void> {
+        if (this.connection) {
             await this.connection.close()
             this.connection = null
         }
-       
+
     }
 
-    async addAllowedOrigin(origin: String, dev: boolean): Promise<boolean> {
+    async addAllowedOrigin(origin: String, dev: boolean): Promise<String> {
+        const jwtSecret = crypto.randomUUID()
 
         const newOrigin = dev
             ?
-            new DevOrigin({ origin })
+            new DevOrigin({ origin, jwtSecret })
             :
-            new PersistOrigin({ origin })
+            new PersistOrigin({ origin, jwtSecret })
 
-        const savedOrigin = await newOrigin.save()
+        await newOrigin.save()
 
-        return savedOrigin ? true : false
+        return jwtSecret
     }
 
     async getAllowedOrigins(): Promise<Origin[]> {
@@ -124,9 +137,9 @@ export default class Database extends DB {
         return refreshToken
     }
 
-    async createNewRefrToken(userId: String): Promise<string> {
+    async createNewRefrToken(userId: String, secret: String): Promise<string> {
 
-        const token = JWT.sign({}, config.get("jwtSecret"), {});
+        const token = JWT.sign({}, secret as JWT.Secret, {});
         const RTRecord = new RefreshToken({ token, userId });
         await RTRecord.save()
         return token

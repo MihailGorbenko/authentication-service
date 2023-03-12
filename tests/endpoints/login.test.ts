@@ -26,6 +26,7 @@ describe('POST /login', () => {
         before((done) => {
             chai.request(app)
                 .post('/login')
+                .set('origin', 'http://localhost')
                 .send({ email: `gomihagle@gmail.com`, password: `${config.get('testUserPassword')}` })
                 .end((err, response) => {
                     res = response
@@ -62,6 +63,7 @@ describe('POST /login', () => {
                 before((done) => {
                     chai.request(app)
                         .post('/login')
+                        .set('origin', 'http://localhost')
                         .send(test.body)
                         .end((err, response) => {
                             res = response
@@ -94,6 +96,7 @@ describe('POST /login', () => {
         before((done) => {
             chai.request(app)
                 .post('/login')
+                .set('origin', 'http://localhost')
                 .send({ email: `gomihagle@gmail.com`, password: 'mihana' })
                 .end((err, response) => {
                     res = response
