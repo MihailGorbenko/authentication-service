@@ -26,7 +26,8 @@ resetPasswordLinkRouter.post('/:token', (req, res) => __awaiter(void 0, void 0, 
         if (!resetPasswordRecord) {
             log.info('Reset token not found');
             return res.status(responce_status_1.ResponceStatus.BadRequest).json({
-                message: 'Reset token incorect or expired'
+                message: 'Reset token incorect or expired',
+                predicate: 'TOKEN_EXP'
             });
         }
         log.info('Token found');

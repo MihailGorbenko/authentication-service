@@ -23,7 +23,7 @@ loginRouter.post(
             if (!errors.isEmpty()) {
                 return res.status(ResponceStatus.BadRequest).json({
                     message: "Incorect credentials",
-                    predicate: "INCORECT",
+                    predicate: "INCORRECT",
                     errors: errors.array(),
                 });
             }
@@ -47,7 +47,7 @@ loginRouter.post(
             if (!passwordMatch) {
                 return res.status(ResponceStatus.NotAuthorized).json({
                     message: "Password incorect",
-                    predicate: "PASS_INCORECT",
+                    predicate: "PASS_INCORRECT",
                 });
             }
             ////////////////////////

@@ -21,7 +21,7 @@ const config_1 = __importDefault(require("config"));
 const setPasswordRouter = (0, express_1.Router)();
 const log = new log_1.default('Route: /setPassword');
 setPasswordRouter.post('/', [
-    (0, express_validator_1.body)('password', 'bad password').isLength({ min: 5 }).isString(),
+    (0, express_validator_1.body)('password', 'bad password').isLength({ min: 5, max: 20 }).isString(),
     (0, express_validator_1.body)('token', 'bad token').isString().isLength({ min: 1 })
 ], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -41,7 +41,8 @@ setPasswordRouter.post('/', [
         if (!resetPasswordRecord) {
             log.info('Reset token not found');
             return res.status(responce_status_1.ResponceStatus.BadRequest).json({
-                message: 'Reset token incorect or expired'
+                message: 'Reset token incorect or expired',
+                predicate: 'TOKEN_EXP'
             });
         }
         log.info('Token found');

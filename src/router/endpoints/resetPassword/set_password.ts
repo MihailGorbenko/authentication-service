@@ -14,7 +14,7 @@ const log = new Log('Route: /setPassword')
 setPasswordRouter.post(
     '/',
     [
-        body('password', 'bad password').isLength({ min: 5 }).isString(),
+        body('password', 'bad password').isLength({ min: 5, max: 20 }).isString(),
         body('token', 'bad token').isString().isLength({ min: 1 })
     ],
     async (req: Request, res: Response) => {
@@ -36,7 +36,8 @@ setPasswordRouter.post(
             if (!resetPasswordRecord) {
                 log.info('Reset token not found')
                 return res.status(ResponceStatus.BadRequest).json({
-                    message: 'Reset token incorect or expired'
+                    message: 'Reset token incorect or expired',
+                    predicate: 'TOKEN_EXP'
                 })
             }
             log.info('Token found')

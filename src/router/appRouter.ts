@@ -7,8 +7,8 @@ import refreshTokenRouter from "./endpoints/auth/refresh_token";
 import resetPasswordRouter from "./endpoints/resetPassword/reset_password";
 import resetPasswordLinkRouter from "./endpoints/resetPassword/reset_password_link";
 import setPasswordRouter from "./endpoints/resetPassword/set_password";
-import addOriginRouter from "./endpoints/settings/addOrigin";
-import allowedOriginsRouter from "./endpoints/settings/getAllowedOrigins";
+import addOriginRouter from "./endpoints/settings/add_origin";
+import allowedOriginsRouter from "./endpoints/settings/get_allowed_origins";
 
 const serviceRouter = Router();
 serviceRouter

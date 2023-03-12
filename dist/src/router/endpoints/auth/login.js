@@ -51,7 +51,7 @@ loginRouter.post("/", [userRegistred_1.default, (0, express_validator_1.body)("p
         if (!passwordMatch) {
             return res.status(responce_status_1.ResponceStatus.BadRequest).json({
                 message: "Password incorect",
-                predicate: "PASS_INCORECT",
+                predicate: "PASS_INCORRECT",
             });
         }
         ////////////////////////

@@ -110,8 +110,8 @@ describe('POST /register', () => {
                     expect(res).to.have.header("content-type", /^application\/json/)
                     done()
                 })
-                it('Should respond object with {predicate} field match [INCORECT]', (done) => {
-                    expect(res.body.predicate).to.match(/INCORECT/)
+                it('Should respond object with {predicate} field match [INCORRECT]', (done) => {
+                    expect(res.body.predicate).to.match(/INCORRECT/)
                     done()
                 })
             })
