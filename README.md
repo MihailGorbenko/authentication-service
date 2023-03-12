@@ -1,4 +1,4 @@
-Authentication Service
+# Authentication Service
 
 Are you looking for a reliable and secure authentication service for your web application? Look no further! Our authentication service is based on the `Express/Node.js` platform and provides a variety of features to help you protect your endpoints and ensure your users' data is safe.
 
