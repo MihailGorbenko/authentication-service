@@ -47,7 +47,7 @@ To reset the password for your user, this service provides the following three e
 
 Public API endpoints
 
-- Route: /register
+- Route: **/register**
 
     This route handles the user registration process. It expects the email and password of a new user to be sent in the request body and responds with the user ID of the newly created user.
 
@@ -77,7 +77,7 @@ Public API endpoints
     This route uses `bcrypt` to securely hash the password before storing it in the database.
 
 
-- Route: /login
+- Route: **/login**
 
     This route handles the user authentication process for logging in. It expects the email and password of a registered user to be sent in the request body and responds with a JSON Web Token (JWT) pair that can be used for further authentication.
 
@@ -105,9 +105,9 @@ Public API endpoints
     - Security
 
     This route uses bcrypt to securely hash the password before comparing it with the stored hash in the database. It also generates a JWT pair that includes an access token and a refresh token. The refresh token is stored in a `HttpOnly` and Secure cookie with a max age of `1 month`, and the access token expires in `10 minutes`.
-    
 
-- Route: /refreshToken
+
+- Route: **/refreshToken**
 
     This route handles the refresh token authentication process for refreshing an access token. It expects a valid refresh token to be sent in the request cookie and responds with a new JSON Web Token `(JWT)` pair that can be used for further authentication.
 
@@ -128,7 +128,7 @@ Public API endpoints
     Note: This route requires the user to have a valid refresh token, which is obtained upon successful login or previous refresh token request.
 
     
-- Route: /checkEmail
+- Route: **/checkEmail**
 
     This route checks whether a user with a given email address is registered in the system or not. It expects the email address of the user to be sent in the request body and responds with a JSON object containing a message and a predicate indicating whether the user exists or not.
 
@@ -147,7 +147,7 @@ Public API endpoints
     If there is a server error, the route will respond with an HTTP `500` status code and an error message `"Server error {error message}"`.
 
 
-- Route: /resetPassword
+- Route: **/resetPassword**
 
     This route handles the password reset process. It expects the user to be authenticated and sends an email with a password reset link to the user's email address. The link will redirect the user to a page where they can enter a new password.
 
@@ -170,7 +170,7 @@ Public API endpoints
     This route generates a password reset token that is stored in the database. The token is unique to the user and expires in `1 hour`. The token is used to validate the password reset request and to prevent unauthorized password resets.
     
     
-- Route: /setPassword
+- Route: **/setPassword**
 
     This route handles the password reset process. It expects a token and a new password to be sent in the request body, and responds with a success message if the password reset is successful.
 
