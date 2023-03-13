@@ -4,7 +4,7 @@
 
 Are you looking for a reliable and secure authentication service for your web application? Look no further! Our authentication service is based on the `Express/Node.js` platform and provides a variety of features to help you protect your endpoints and ensure your users' data is safe.
 
-- This authentication service uses the following technologies:
+- Our authentication service uses the following technologies:
 
    - Mongoose wrapper for persisting data
    - Mocha & Chai/Chai-http for testing
@@ -12,7 +12,7 @@ Are you looking for a reliable and secure authentication service for your web ap
    - Nginx as a reverse-proxy for signing HTTPS traffic
    - Certbot for getting certificates
 
-- This service provides the following features:
+- Our service provides the following features:
 
     - Domain Whitelisting
 
