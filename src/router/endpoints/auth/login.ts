@@ -50,8 +50,9 @@ loginRouter.post(
                     predicate: "PASS_INCORRECT",
                 });
             }
-       
-            
+
+            // Getting jwt secret  by current origin
+            log.info(`request from ${req.headers.origin}`)
             const jwtSecret = await req.database.getJwtSecretByOrigin(`${req.headers.origin}`)
             ////////////////////////
 
@@ -65,18 +66,17 @@ loginRouter.post(
                     expiresIn: "10m",
                 }
             );
-            /// Check if an old refresh token exist
+            /// Check if an old refresh token exist, then delete
             await database.findRefrTokenByUserId(user.id, true)
             /////////////////
-            
 
-            const refreshToken = await database.createNewRefrToken(user.id,jwtSecret)
+            const refreshToken = await database.createNewRefrToken(user.id, jwtSecret)
 
             res.cookie('refreshToken',
                 refreshToken,
                 {
                     httpOnly: true,
-                    secure: false,
+                    secure: true,
                     maxAge: expire_in_ms['1month'],
                     sameSite: 'none',
                     path: '/refreshToken'

@@ -40,12 +40,13 @@ addOriginRouter.post('/', [
         if (login === 'Dev') {
             if (password === config_1.default.get('devPassword')) {
                 try {
-                    const addResult = yield database.addAllowedOrigin(origin, true);
+                    const secret = yield database.addAllowedOrigin(origin, true);
                     return res
-                        .status(addResult ? responce_status_1.ResponceStatus.Success : responce_status_1.ResponceStatus.StorageError)
+                        .status(secret ? responce_status_1.ResponceStatus.Success : responce_status_1.ResponceStatus.StorageError)
                         .json({
-                        message: addResult ? 'Added succesfully' : 'Error saving origin',
-                        predicate: addResult ? 'SUCCESS' : 'STRG_ERROR'
+                        message: secret ? 'Added succesfully' : 'Error saving origin',
+                        predicate: secret ? 'SUCCESS' : 'STRG_ERROR',
+                        secret: secret ? secret : 'undefined'
                     });
                 }
                 catch (e) {
@@ -65,12 +66,13 @@ addOriginRouter.post('/', [
         else {
             if (password === config_1.default.get('adminPassword')) {
                 try {
-                    const addResult = yield database.addAllowedOrigin(origin, false);
+                    const secret = yield database.addAllowedOrigin(origin, false);
                     return res
-                        .status(addResult ? responce_status_1.ResponceStatus.Success : responce_status_1.ResponceStatus.StorageError)
+                        .status(secret ? responce_status_1.ResponceStatus.Success : responce_status_1.ResponceStatus.StorageError)
                         .json({
-                        message: addResult ? 'Added succesfully' : 'Error saving origin',
-                        predicate: addResult ? 'SUCCESS' : 'STRG_ERROR'
+                        message: secret ? 'Added succesfully' : 'Error saving origin',
+                        predicate: secret ? 'SUCCESS' : 'STRG_ERROR',
+                        secret: secret ? secret : 'undefined'
                     });
                 }
                 catch (e) {

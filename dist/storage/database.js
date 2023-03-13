@@ -23,10 +23,23 @@ const DevOrigin_1 = __importDefault(require("../models/DevOrigin"));
 const PersistOrigin_1 = __importDefault(require("../models/PersistOrigin"));
 const log_1 = __importDefault(require("../utils/log"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const crypto_1 = __importDefault(require("crypto"));
 class DB {
 }
 exports.DB = DB;
 class Database extends DB {
+    getJwtSecretByOrigin(origin) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let record = yield PersistOrigin_1.default.findOne({ origin });
+            if (!record) {
+                record = yield DevOrigin_1.default.findOne({ origin });
+            }
+            if (record)
+                return record.jwtSecret;
+            else
+                throw new Error(`Can't find jwtSecret for ${origin}`);
+        });
+    }
     constructor() {
         super();
         this.connection = null;
@@ -51,13 +64,14 @@ class Database extends DB {
     }
     addAllowedOrigin(origin, dev) {
         return __awaiter(this, void 0, void 0, function* () {
+            const jwtSecret = crypto_1.default.randomUUID();
             const newOrigin = dev
                 ?
-                    new DevOrigin_1.default({ origin })
+                    new DevOrigin_1.default({ origin, jwtSecret })
                 :
-                    new PersistOrigin_1.default({ origin });
-            const savedOrigin = yield newOrigin.save();
-            return savedOrigin ? true : false;
+                    new PersistOrigin_1.default({ origin, jwtSecret });
+            yield newOrigin.save();
+            return jwtSecret;
         });
     }
     getAllowedOrigins() {
@@ -102,7 +116,7 @@ class Database extends DB {
         return __awaiter(this, void 0, void 0, function* () {
             const RPToken = yield new ResetPasswordToken_1.default({
                 userId,
-                token: crypto.randomUUID(),
+                token: crypto_1.default.randomUUID(),
                 clientUrl
             }).save();
             return RPToken;
@@ -118,9 +132,9 @@ class Database extends DB {
             return refreshToken;
         });
     }
-    createNewRefrToken(userId) {
+    createNewRefrToken(userId, secret) {
         return __awaiter(this, void 0, void 0, function* () {
-            const token = jsonwebtoken_1.default.sign({}, config_1.default.get("jwtSecret"), {});
+            const token = jsonwebtoken_1.default.sign({}, secret, {});
             const RTRecord = new RefreshToken_1.default({ token, userId });
             yield RTRecord.save();
             return token;

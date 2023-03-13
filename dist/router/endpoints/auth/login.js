@@ -19,7 +19,6 @@ const responce_status_1 = require("../../../types/responce_status");
 const userRegistred_1 = __importDefault(require("../../../middleware/userRegistred"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = __importDefault(require("config"));
 const expire_in_ms_1 = __importDefault(require("../../../types/expire_in_ms"));
 const loginRouter = (0, express_1.Router)();
 const log = new log_1.default("Route: /login");
@@ -54,17 +53,20 @@ loginRouter.post("/", [userRegistred_1.default, (0, express_validator_1.body)("p
                 predicate: "PASS_INCORRECT",
             });
         }
+        // Getting jwt secret  by current origin
+        log.info(`request from ${req.headers.origin}`);
+        const jwtSecret = yield req.database.getJwtSecretByOrigin(`${req.headers.origin}`);
         ////////////////////////
         //// Genereting JWT pair
         const accessToken = jsonwebtoken_1.default.sign({
             id: user.id,
-        }, config_1.default.get("jwtSecret"), {
+        }, jwtSecret, {
             expiresIn: "10m",
         });
-        /// Check if an old refresh token exist
+        /// Check if an old refresh token exist, then delete
         yield database.findRefrTokenByUserId(user.id, true);
         /////////////////
-        const refreshToken = yield database.createNewRefrToken(user.id);
+        const refreshToken = yield database.createNewRefrToken(user.id, jwtSecret);
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,

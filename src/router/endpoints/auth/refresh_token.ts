@@ -30,7 +30,7 @@ refreshTokenRouter.post(
                 })
             }
 
-            const tokenRecord = await database.findRefrToken(refreshToken,true)
+            const tokenRecord = await database.findRefrToken(refreshToken, true)
 
             if (!tokenRecord) {
                 return res.status(ResponceStatus.NotAuthorized).json({
@@ -39,6 +39,8 @@ refreshTokenRouter.post(
                 })
             }
             const { userId } = tokenRecord
+            // Getting jwt secret  by current origin
+            log.info(`request from ${req.headers.origin}`)
             const jwtSecret = await req.database.getJwtSecretByOrigin(`${req.headers.origin}`)
 
             //// Genereting JWT pair
@@ -51,15 +53,15 @@ refreshTokenRouter.post(
                     expiresIn: "10m",
                 }
             );
-            
-            
-            const newRefreshToken = await database.createNewRefrToken(userId,jwtSecret)
+
+
+            const newRefreshToken = await database.createNewRefrToken(userId, jwtSecret)
 
             res.cookie('refreshToken',
                 newRefreshToken,
                 {
                     httpOnly: true,
-                    secure: false,
+                    secure: true,
                     maxAge: expire_in_ms['1month'],
                     sameSite: 'none',
                     path: '/refreshToken'

@@ -16,7 +16,6 @@ const express_1 = require("express");
 const log_1 = __importDefault(require("../../../utils/log"));
 const responce_status_1 = require("../../../types/responce_status");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = __importDefault(require("config"));
 const expire_in_ms_1 = __importDefault(require("../../../types/expire_in_ms"));
 const refreshTokenRouter = (0, express_1.Router)();
 const log = new log_1.default('Route /refreshToken');
@@ -38,13 +37,16 @@ refreshTokenRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, fun
             });
         }
         const { userId } = tokenRecord;
+        // Getting jwt secret  by current origin
+        log.info(`request from ${req.headers.origin}`);
+        const jwtSecret = yield req.database.getJwtSecretByOrigin(`${req.headers.origin}`);
         //// Genereting JWT pair
         const accessToken = jsonwebtoken_1.default.sign({
             id: userId
-        }, config_1.default.get("jwtSecret"), {
+        }, jwtSecret, {
             expiresIn: "10m",
         });
-        const newRefreshToken = yield database.createNewRefrToken(userId);
+        const newRefreshToken = yield database.createNewRefrToken(userId, jwtSecret);
         res.cookie('refreshToken', newRefreshToken, {
             httpOnly: true,
             secure: true,

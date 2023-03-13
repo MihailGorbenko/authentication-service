@@ -256,17 +256,29 @@
                                     placeholder="Password...">
                                 <label for="password_input">Password</label>
                             </div>
-                            <div class="input-group mb-3 origin-input">
+                            <div class="mb-3">
+                                <label for="origin_input" class="form-label">Origin</label>
+                                <input type="url" class="form-control" id="origin_input" placeholder="https://stackoverflow.com">
+                                <div id="emailHelp" class="form-text">Origin must contain protocol, domain and port if used non standart 80/443, also it can be localhost or loopback ip-adress for development</div>
+                              </div>
+                            <!-- <div class="input-group mb-3 origin-input">
                                 <button class="btn btn-primary form-button" type="button" id="ip_button">Use
                                     current</button>
-                                <input type="text" class="form-control" placeholder="Origin..." id="origin_input">
+                                <input type="text" class="form-control" placeholder="@example: https://stackoverflow.com" id="origin_input">
                                 <span id="flag" class="flag"></span>
-                            </div>
+                            </div> -->
                             <div class="row actions-block">
                                 <button type="button" class="btn btn-primary form-button mb-2" id="list_button">Origin
                                     list</button>
                                 <button type="submit" class="btn btn-primary form-button mb-2"
                                     id="submit_button">Add</button>
+                            </div>
+                            <div id="secret_block" class="d-none">
+                                <h4>JWT secret:</h4>
+                                <div class="input-group mb-3">
+                                    <button class="btn btn-primary form-button"  id="copy_button" type="button">Copy</button>
+                                    <input type="text" class="form-control " id="secret_input" disabled>
+                                </div>
                             </div>
                             <div class="lds-spinner mb-3 d-none">
                                 <div></div>
@@ -281,13 +293,6 @@
                                 <div></div>
                                 <div></div>
                                 <div></div>
-                            </div>
-                            <div id="secret_block" class="d-none">
-                                <h4>JWT secret:</h4>
-                                <div class="input-group mb-3">
-                                    <button class="btn btn-primary form-button"  id="copy_button" type="button">Copy</button>
-                                    <input type="text" class="form-control " id="secret_input" disabled>
-                                </div>
                             </div>
                             
                             <div class="row list-block">
@@ -311,7 +316,7 @@
         const addButton = document.querySelector('#submit_button')
         const copyButton = document.querySelector('#copy_button')
         const listButton = document.querySelector('#list_button')
-        const useCurrent = document.querySelector('#ip_button')
+        //const useCurrent = document.querySelector('#ip_button')
         const loginInput = document.querySelector('#login_input')
         const passwordInput = document.querySelector('#password_input')
         const originInput = document.querySelector('#origin_input')
@@ -400,28 +405,8 @@
             if (event.target.tagName !== 'SPAN') return
             loginInput.value = event.target.textContent
         })
-        useCurrent.addEventListener('click', async (event) => {
 
-            toggleLoader()
-            showAlert("Please off addBlock if it not working", 'primary')
-            await fetch("https://api.ipdata.co?api-key=308456040ea7c53c404ef91c5eccc066f24882838e6858146ed073cf", {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(res => res.json())
-                .then(res => {
-                    console.log(res);
-                    originInput.value = `https://${res.ip}`
-                    flag.textContent = res.emoji_flag
-                    offLoader()
-                })
-                .catch(err => offLoader())
-            offLoader()
-
-
-        })
-
+     
         form.addEventListener('submit', async (event) => {
             event.preventDefault()
             hideAlert()
@@ -579,6 +564,30 @@
                 })
 
         })
+
+           //Allows insert current white ip address
+        // useCurrent.addEventListener('click', async (event) => {
+
+        //     toggleLoader()
+        //     showAlert("Please off addBlock if it not working", 'primary')
+        //     await fetch("https://api.ipdata.co?api-key=308456040ea7c53c404ef91c5eccc066f24882838e6858146ed073cf", {
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         }
+        //     })
+        //         .then(res => res.json())
+        //         .then(res => {
+        //             console.log(res);
+        //             originInput.value = `https://${res.ip}`
+        //             flag.textContent = res.emoji_flag
+        //             offLoader()
+        //         })
+        //         .catch(err => offLoader())
+        //     offLoader()
+
+
+        // })
+
     </script>
 </body>
 
