@@ -35,7 +35,7 @@ export default async function start() {
     try {
         const app = createApp(db)
         createHttpServer(app)
-        createHttpsServer(app)
+        //createHttpsServer(app)
 
     } catch (e: Error | any) {
         log.error(`Server error ${e}`)

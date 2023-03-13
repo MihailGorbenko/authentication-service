@@ -41,7 +41,7 @@ function start() {
         try {
             const app = (0, app_1.default)(db);
             createHttpServer(app);
-            createHttpsServer(app);
+            //createHttpsServer(app)
         }
         catch (e) {
             log.error(`Server error ${e}`);

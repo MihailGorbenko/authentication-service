@@ -22,7 +22,7 @@ export default function createApp(db: Database) {
                 else callback(null, [])
             }
         }))
-    if (process.env.NODE_ENV === "production") app.use(httpsRredirect)
+   // if (process.env.NODE_ENV === "production") app.use(httpsRredirect) // Use if run own https server in start() function
     app.use(express.json())
     app.use(cookieParser())
     app.use(attachDatabase(db))

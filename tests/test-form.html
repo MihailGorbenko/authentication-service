@@ -70,7 +70,7 @@
         authForm.onsubmit = async(e) => {
             e.preventDefault()
             submit_button.setAttribute('disabled',true)
-            await fetch(`https://18.184.122.176/${encodeURI(endpoint_button.textContent.trim())}`,{
+            await fetch(`https://auth.omgapp.pp.ua/${encodeURI(endpoint_button.textContent.trim())}`,{
                 method:'POST',
                 credentials:"include",
                 headers:{

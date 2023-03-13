@@ -17,7 +17,6 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const appRouter_1 = __importDefault(require("./router/appRouter"));
 const attachDatabase_1 = __importDefault(require("./middleware/attachDatabase"));
-const httpsRredirect_1 = __importDefault(require("./middleware/httpsRredirect"));
 const path_1 = __importDefault(require("path"));
 function createApp(db) {
     const app = (0, express_1.default)();
@@ -31,8 +30,7 @@ function createApp(db) {
                 callback(null, []);
         })
     }));
-    if (process.env.NODE_ENV === "production")
-        app.use(httpsRredirect_1.default);
+    // if (process.env.NODE_ENV === "production") app.use(httpsRredirect) // Use if run own https server in start() function
     app.use(express_1.default.json());
     app.use((0, cookie_parser_1.default)());
     app.use((0, attachDatabase_1.default)(db));
