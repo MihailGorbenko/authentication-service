@@ -9,8 +9,7 @@ Are you looking for a reliable and secure authentication service for your web ap
    - Mongoose wrapper for persisting data
    - Mocha & Chai/Chai-http for testing
    - Docker and Docker Compose for deploying configuration
-   - Nginx as a reverse-proxy for signing HTTPS traffic
-   - Certbot for getting certificates
+   - Traefic as a reverse-proxy for signing HTTPS traffic
 
 - Our service provides the following features:
 
