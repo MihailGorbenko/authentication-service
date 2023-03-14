@@ -7,7 +7,7 @@ Are you looking for a reliable and secure authentication service for your web ap
 - Our authentication service uses the following technologies:
 
    - [Mongoose](https://mongoosejs.com) wrapper for persisting data
-   - [Mocha](https://mochajs.org) & [Chai](https://www.chaijs.com)--[Chai-http](https://www.chaijs.com/plugins/chai-http) for testing
+   - [Mocha](https://mochajs.org) & [Chai](https://www.chaijs.com)/[Chai-http](https://www.chaijs.com/plugins/chai-http) for testing
    - [Docker](https://www.docker.com) and [Docker Compose](https://docs.docker.com/compose) for deploying configuration
    - [Traefic](https://github.com/traefik/traefik) as a reverse-proxy for obtaining letsencrypt TLS certificates and signing HTTPS traffic 
 
