@@ -10,7 +10,7 @@
     "build": "run-s compile docker:build",
     "build:test": "run-s test compile docker:build",
     "docker:push": "docker push mihago/authentication-service:latest",
-    "docker:publish": "run-s build docker:push",
+    "docker:publish": "run-s build:test docker:push",
     "compile": "tsc",
     "run": "cross-env NODE_ENV=production node ./dist/run.js",
     "start": "run-s compile run"
