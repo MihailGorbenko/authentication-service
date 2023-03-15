@@ -13,7 +13,10 @@
     "docker:publish": "run-s build:test docker:push",
     "compile": "tsc",
     "run": "cross-env NODE_ENV=production node ./dist/run.js",
-    "start": "run-s compile run"
+    "start": "run-s compile run",
+    "push:aws": "rsync -rv -e 'ssh -i ../../aws_keys/bellfa-art.pem' ./deploy ubuntu@18.184.122.176:/home/ubuntu/auth-service",
+    "conn:aws": "ssh -i ../../aws_keys/bellfa-art.pem ubuntu@18.184.122.176"
+
   },
   "author": "Miha Go",
   "license": "ISC",
