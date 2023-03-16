@@ -1,8 +1,8 @@
-version: '1'
+version: '3'
 
 services:
 
-  node-server:
+  auth-service:
     image: mihago/authentication-service:latest
     container_name: auth_service
     restart: unless-stopped
@@ -10,10 +10,10 @@ services:
       - "3000:3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.node-server.rule=Host(`auth.omgapp.pp.ua`)"
-      - "traefik.http.routers.node-server.entrypoints=https"
-      - "traefik.http.routers.node-server.tls=true"
-      - "traefik.http.routers.node-server.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.auth-service.rule=Host(`auth.omgapp.pp.ua`)"
+      - "traefik.http.routers.auth-service.entrypoints=websecure"
+      - "traefik.http.routers.auth-service.tls=true"
+      - "traefik.http.routers.auth-service.tls.certresolver=letsEncrypt"
     
   reverse-proxy:
     image: traefik:v2.9
@@ -22,12 +22,12 @@ services:
 
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.entrypoints=https"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
       - "traefik.http.routers.dashboard.tls=true"
       - "traefik.http.routers.dashboard.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.dashboard.rule=Host(`auth.omgapp.pp.ua`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
       - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$Dx3Fzzs9$$CfPbASOrb3NbAHsPVm08x"
+      - "traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$7.JJ7f/D$$73liZlkkwPPJsIcTc6elb."
       - "traefik.http.routers.dashboard.middlewares=auth"
 
     

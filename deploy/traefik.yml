@@ -1,7 +1,7 @@
 entryPoints:
-  http:
+  web:
     address: ":80"
-  https:
+  websecure:
     address: ":443"
 
 http:
@@ -9,7 +9,7 @@ http:
     http-catchall:
       rule: HostRegexp(`{host:.+}`)
       entrypoints:
-        - http
+        - web
       middlewares:
         - redirect-to-https
 
@@ -30,7 +30,7 @@ certificatesResolvers:
       email: "gomihagle@gmail.com"
       storage: letsencrypt/acme.json
       httpChallenge:
-        entrypoint: http
+        entrypoint: web
 
 api:
   dashboard: true
