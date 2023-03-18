@@ -1,0 +1,13 @@
+{
+    "http_port": 3000,
+    "mongoUri": "mongodb+srv://mihago:mihana1234@authentication-service.iwppiel.mongodb.net/?retryWrites=true&w=majority",
+    "emailHost": "smtp.gmail.com",
+    "emailPassword": "qnisrywfivaqbfvd",
+    "emailUser": "dashmail911@gmail.com",
+    "passwordSalt": 12,
+    "jwtRPTSecret": "jiraffs likes monkeys",
+    "baseUrl": "https://auth.omgapp.pp.ua",
+    "resetPasswordClientUrl": "/resetPassword",
+    "adminPassword": "adminStrongPassword",
+    "devPassword": "devStrongPassword"
+}

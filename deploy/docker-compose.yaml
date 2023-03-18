@@ -14,6 +14,8 @@ services:
       - "traefik.http.routers.auth-service.entrypoints=websecure"
       - "traefik.http.routers.auth-service.tls=true"
       - "traefik.http.routers.auth-service.tls.certresolver=letsEncrypt"
+    volumes:
+      - "./config:/home/node/app/config"
     
   reverse-proxy:
     image: traefik:v2.9

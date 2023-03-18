@@ -1,16 +1,14 @@
-import config from 'config'
 import cookieParser from 'cookie-parser'
 import express from 'express'
 import cors from 'cors'
 import serviceRouter from './router/appRouter'
-import Database, { DB } from './storage/database'
+import  { DB } from './storage/database'
 import attachDatabase from './middleware/attachDatabase'
-import httpsRredirect from './middleware/httpsRredirect'
 import path from 'path'
 
 
 
-export default function createApp(db: Database) {
+export default function createApp(db: DB) {
     const app = express()
 
     app.use(cors(
@@ -22,7 +20,7 @@ export default function createApp(db: Database) {
                 else callback(null, [])
             }
         }))
-   // if (process.env.NODE_ENV === "production") app.use(httpsRredirect) // Use if run own https server in start() function
+ 
     app.use(express.json())
     app.use(cookieParser())
     app.use(attachDatabase(db))

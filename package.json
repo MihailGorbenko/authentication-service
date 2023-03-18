@@ -8,7 +8,7 @@
     "dev": " nodemon",
     "docker:build": "docker build -t mihago/authentication-service .",
     "build": "run-s compile docker:build",
-    "build:test": "run-s test compile docker:build",
+    "build:test": "run-s test build",
     "docker:push": "docker push mihago/authentication-service:latest",
     "docker:publish": "run-s build:test docker:push",
     "compile": "tsc",

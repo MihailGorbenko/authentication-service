@@ -7,3 +7,4 @@ Dockerfile
 .dockerignore
 README.md
 .git
+config
