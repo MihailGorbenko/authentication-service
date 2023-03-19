@@ -25,8 +25,9 @@ function createHttpServer(app) {
 exports.createHttpServer = createHttpServer;
 function start() {
     return __awaiter(this, void 0, void 0, function* () {
-        let db = yield (0, createDatabase_1.default)();
+        let db = null;
         try {
+            db = yield (0, createDatabase_1.default)();
             const app = (0, app_1.default)(db);
             createHttpServer(app);
         }
