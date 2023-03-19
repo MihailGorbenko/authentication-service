@@ -18,7 +18,7 @@ const log_1 = __importDefault(require("../../../utils/log"));
 const log = new log_1.default('Route: /resetPasswordLink');
 const config_1 = __importDefault(require("config"));
 const resetPasswordLinkRouter = (0, express_1.Router)();
-resetPasswordLinkRouter.post('/:token', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+resetPasswordLinkRouter.get('/:token', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const token = req.params.token;
         const database = req.database;
