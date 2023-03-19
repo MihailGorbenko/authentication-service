@@ -16,8 +16,9 @@ export function createHttpServer(app: Express): http.Server {
 }
 
 export default async function start() {
-    let db: DB = await createDatabase()
+    let db: DB | null = null
     try {
+        db = await createDatabase()
         const app = createApp(db)
         createHttpServer(app)
 

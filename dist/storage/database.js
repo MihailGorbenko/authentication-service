@@ -28,18 +28,6 @@ class DB {
 }
 exports.DB = DB;
 class Database extends DB {
-    getJwtSecretByOrigin(origin) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let record = yield PersistOrigin_1.default.findOne({ origin });
-            if (!record) {
-                record = yield DevOrigin_1.default.findOne({ origin });
-            }
-            if (record)
-                return record.jwtSecret;
-            else
-                throw new Error(`Can't find jwtSecret for ${origin}`);
-        });
-    }
     constructor() {
         super();
         this.connection = null;
@@ -60,6 +48,18 @@ class Database extends DB {
                 yield this.connection.close();
                 this.connection = null;
             }
+        });
+    }
+    getJwtSecretByOrigin(origin) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let record = yield PersistOrigin_1.default.findOne({ origin });
+            if (!record) {
+                record = yield DevOrigin_1.default.findOne({ origin });
+            }
+            if (record)
+                return record.jwtSecret;
+            else
+                throw new Error(`Can't find jwtSecret for ${origin}`);
         });
     }
     addAllowedOrigin(origin, dev) {
