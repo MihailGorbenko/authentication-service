@@ -10,7 +10,7 @@ import config from 'config'
 
 const resetPasswordLinkRouter = Router()
 
-resetPasswordLinkRouter.post(
+resetPasswordLinkRouter.get(
     '/:token',
     async (req: Request, res: Response) => {
         try {
