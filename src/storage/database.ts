@@ -32,15 +32,6 @@ export abstract class DB {
 
 export default class Database extends DB {
 
-    async getJwtSecretByOrigin(origin: String): Promise<String> {
-        let record = await PersistOrigin.findOne({origin})
-        if(!record){
-            record = await DevOrigin.findOne({origin})
-        }
-
-        if(record) return record.jwtSecret
-        else throw new Error(`Can't find jwtSecret for ${origin}`)
-    }
     connection: mongoose.Connection | null;
 
     constructor() {
@@ -67,6 +58,17 @@ export default class Database extends DB {
 
     }
 
+
+    async getJwtSecretByOrigin(origin: String): Promise<String> {
+        let record = await PersistOrigin.findOne({origin})
+        if(!record){
+            record = await DevOrigin.findOne({origin})
+        }
+
+        if(record) return record.jwtSecret
+        else throw new Error(`Can't find jwtSecret for ${origin}`)
+    }
+    
     async addAllowedOrigin(origin: String, dev: boolean): Promise<String> {
         const jwtSecret = crypto.randomUUID()
 

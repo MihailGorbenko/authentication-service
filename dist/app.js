@@ -30,7 +30,6 @@ function createApp(db) {
                 callback(null, []);
         })
     }));
-    // if (process.env.NODE_ENV === "production") app.use(httpsRredirect) // Use if run own https server in start() function
     app.use(express_1.default.json());
     app.use((0, cookie_parser_1.default)());
     app.use((0, attachDatabase_1.default)(db));
