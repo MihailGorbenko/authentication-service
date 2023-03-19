@@ -16,7 +16,6 @@
     "start": "run-s compile run",
     "push:aws": "rsync -rv -e 'ssh -i ../../aws_keys/bellfa-art.pem' ./deploy ubuntu@18.184.122.176:/home/ubuntu/auth-service",
     "conn:aws": "ssh -i ../../aws_keys/bellfa-art.pem ubuntu@18.184.122.176"
-
   },
   "author": "Miha Go",
   "license": "ISC",
@@ -48,6 +47,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "express-csp-header": "^5.1.0",
     "express-validator": "^6.15.0",
     "formidable": "^2.1.1",
     "helmet": "^6.0.1",

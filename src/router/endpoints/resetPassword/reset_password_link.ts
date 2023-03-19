@@ -1,17 +1,23 @@
 import { Request, Response, Router } from "express";
-import cors from 'cors'
 import { ResponceStatus } from "../../../types/responce_status";
 import Log from "../../../utils/log";
-import ResetPasswordToken from "../../../models/ResetPasswordToken";
-import expire_in_ms from "../../../types/expire_in_ms";
 const log = new Log('Route: /resetPasswordLink')
 import config from 'config'
+import { expressCspHeader } from "express-csp-header";
+
 
 
 const resetPasswordLinkRouter = Router()
 
 resetPasswordLinkRouter.get(
     '/:token',
+    [
+        expressCspHeader({
+            directives: {
+                'default-src': ['*']
+            }
+        })
+    ],
     async (req: Request, res: Response) => {
         try {
             const token = req.params.token

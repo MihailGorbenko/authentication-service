@@ -17,8 +17,15 @@ const responce_status_1 = require("../../../types/responce_status");
 const log_1 = __importDefault(require("../../../utils/log"));
 const log = new log_1.default('Route: /resetPasswordLink');
 const config_1 = __importDefault(require("config"));
+const express_csp_header_1 = require("express-csp-header");
 const resetPasswordLinkRouter = (0, express_1.Router)();
-resetPasswordLinkRouter.get('/:token', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+resetPasswordLinkRouter.get('/:token', [
+    (0, express_csp_header_1.expressCspHeader)({
+        directives: {
+            'default-src': ['*']
+        }
+    })
+], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const token = req.params.token;
         const database = req.database;
