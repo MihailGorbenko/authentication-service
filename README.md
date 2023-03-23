@@ -152,7 +152,7 @@ Are you looking for a reliable and secure authentication service for your web ap
 
     - Usage
 
-    To use this route, make a POST request to the endpoint `/resetPassword` with an authenticated user. The route will generate a password reset token and send an email to the user's email address with a link to reset their password.
+    To use this route, make a POST request to the endpoint `/resetPassword` with an authenticated user email. The route will generate a password reset token and send an email to the user's email address with a link to reset their password.
 
     If the user is not authenticated, the route will respond with an HTTP `401` status code and an error message `"User not registered"`, and a `predicate` key with a value of `NOT_EXIST`.
 
