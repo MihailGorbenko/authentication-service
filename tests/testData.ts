@@ -101,7 +101,7 @@ export const addOriginsBodySet = {
             body: {
                 login: 'Dev',
                 password: 'devStrongPassword',
-                origin: 'https://localhost:5000'
+                origin: 'http://localhost:5000'
             },
         },
         {
@@ -109,7 +109,7 @@ export const addOriginsBodySet = {
             body: {
                 login: 'Admin',
                 password: 'adminStrongPassword',
-                origin: 'https://127.0.0.1'
+                origin: 'http://localhost:5000'
             },
         },
     ],
@@ -120,7 +120,7 @@ export const addOriginsBodySet = {
             body: {
                 login: 'Admin',
                 password: 'hackerPassword',
-                origin: 'https://127.0.0.1'
+                origin: 'http://localhost:5000'
             },
         },
     ],
@@ -130,7 +130,7 @@ export const addOriginsBodySet = {
             body: {
                 login: 'Hacker',
                 password: 'adminStrongPassword',
-                origin: 'https://127.0.0.1'
+                origin: 'http://localhost:5000'
             },
         },
 
@@ -139,7 +139,7 @@ export const addOriginsBodySet = {
             body: {
                 login: 'Admin',
                 password: 'hack',
-                origin: 'https://127.0.0.1'
+                origin: 'http://localhost:5000'
             },
         },
         {
@@ -147,7 +147,7 @@ export const addOriginsBodySet = {
             body: {
                 login: 'Admin',
                 password: 'hackerPasswordhackerPasswordhackerPassword',
-                origin: 'https://127.0.0.1'
+                origin: 'http://localhost:5000'
             },
         },
         {
@@ -155,21 +155,21 @@ export const addOriginsBodySet = {
             body: {
                 login: 'Admin',
                 password: 'adminStrongPassword',
-                origin: 'incorrect.origin'
+                origin: 1234
             },
         },
         {
             case: 'login missing',
             body: {
                 password: 'adminStrongPassword',
-                origin: 'https://127.0.0.1'
+                origin: 'http://localhost:5000'
             },
         },
         {
             case: 'password missing',
             body: {
                 login: 'Admin',
-                origin: 'https://127.0.0.1'
+                origin: 'http://localhost:5000'
             },
         },
         {

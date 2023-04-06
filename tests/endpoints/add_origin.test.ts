@@ -122,6 +122,8 @@ describe('POST /addOrigin', () => {
                         .set('origin', 'http://localhost')
                         .send(test.body)
                         .end((err, response) => {
+                            console.log(response.body);
+                            
                             res = response
                             done()
                         })
