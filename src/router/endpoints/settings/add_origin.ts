@@ -14,7 +14,7 @@ addOriginRouter.post(
     [
         body('login', 'badLogin').isIn(['Dev', 'Admin']),
         body('password', 'badPassword').isAlphanumeric().isLength({ min: 5, max: 20 }),
-        body('origin', 'bad origin').isURL({ protocols: ['http', 'https'], require_protocol: true }).isString()
+        body('origin', 'bad origin').isURL({ protocols: ['http', 'https'], require_protocol: true, require_host: false, require_port: false }).isString()
     ],
     async (req: Request, res: Response) => {
 

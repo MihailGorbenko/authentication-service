@@ -101,7 +101,7 @@ export const addOriginsBodySet = {
             body: {
                 login: 'Dev',
                 password: 'devStrongPassword',
-                origin: 'https://127.0.0.1'
+                origin: 'https://localhost:5000'
             },
         },
         {

@@ -22,7 +22,7 @@ const log = new log_1.default('Route: /addOrigin');
 addOriginRouter.post('/', [
     (0, express_validator_1.body)('login', 'badLogin').isIn(['Dev', 'Admin']),
     (0, express_validator_1.body)('password', 'badPassword').isAlphanumeric().isLength({ min: 5, max: 20 }),
-    (0, express_validator_1.body)('origin', 'bad origin').isURL({ protocols: ['http', 'https'], require_protocol: true }).isString()
+    (0, express_validator_1.body)('origin', 'bad origin').isURL({ protocols: ['http', 'https'], require_protocol: true, require_host: false, require_port: false }).isString()
 ], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         ///Check params
